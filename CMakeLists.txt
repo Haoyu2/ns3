@@ -125,6 +125,10 @@ endif()
 # Include macros used below
 include(build-support/macros-and-definitions.cmake)
 
+set(third_party_libs "")
+find_package(fmt CONFIG REQUIRED)
+list(APPEND third_party_libs fmt::fmt)
+
 # Scan module libraries
 subdirlist(libs_to_build ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

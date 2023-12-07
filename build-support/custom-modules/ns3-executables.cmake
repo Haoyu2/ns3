@@ -73,7 +73,7 @@ function(build_exec)
   set(oneValueArgs EXECNAME EXECNAME_PREFIX EXECUTABLE_DIRECTORY_PATH
                    INSTALL_DIRECTORY_PATH
   )
-  set(multiValueArgs SOURCE_FILES HEADER_FILES LIBRARIES_TO_LINK DEFINITIONS)
+  set(multiValueArgs SOURCE_FILES HEADER_FILES LIBRARIES_TO_LINK THIRD_PART_LIBS DEFINITIONS)
   cmake_parse_arguments(
     "BEXEC" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN}
   )
@@ -118,6 +118,9 @@ function(build_exec)
       "${BEXEC_LIBRARIES_TO_LINK}" ${LIB_AS_NEEDED_POST}
     )
   endif()
+
+#  find_package(fmt CONFIG REQUIRED)
+  target_link_libraries(${BEXEC_EXECNAME_PREFIX}${BEXEC_EXECNAME} "${BEXEC_THIRD_PART_LIBS}")
 
   set_runtime_outputdirectory(
     "${BEXEC_EXECNAME}" "${BEXEC_EXECUTABLE_DIRECTORY_PATH}/"

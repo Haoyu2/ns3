@@ -38,6 +38,11 @@ else()
   set(VCPKG_TARGET_ARCH x86)
 endif()
 
+# this is dealing with arm
+if (CMAKE_SYSTEM_PROCESSOR)
+  set(VCPKG_TARGET_ARCH ${CMAKE_SYSTEM_PROCESSOR})
+endif ()
+
 if(WIN32)
   set(VCPKG_EXEC vcpkg.exe)
   set(VCPKG_TRIPLET ${VCPKG_TARGET_ARCH}-windows)

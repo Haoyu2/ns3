@@ -53,6 +53,9 @@ main(int argc, char* argv[])
     std::cout << "Demonstration path:  " << path << std::endl;
     std::cout << "Exists?              " << (Exists(path) ? "yes" : "no") << std::endl;
 
+    std::cout << "Project path:  " << PROJECT_SOURCE_PATH << std::endl;
+    std::cout << "Exists?  " << (Exists(PROJECT_SOURCE_PATH) ? "yes" : "no") << std::endl;
+
     auto foo = Append(path, "foo");
     std::cout << "Append 'foo':        " << foo << std::endl;
     std::cout << "Exists?              " << (Exists(foo) ? "yes" : "no") << std::endl;
