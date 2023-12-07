@@ -66,6 +66,12 @@ main(int argc, char* argv[])
     myObject->TraceConnectWithoutContext("MyInteger", MakeCallback(&IntTrace));
 
     myObject->m_myInt = 1234;
+#ifdef NS3_BUILD_PROFILE_DEBUG
+    std::cout << "heelo/n";
+#endif
 
+#ifdef ftime
+    std::cout << "heelo/n";
+#endif
     return 0;
 }

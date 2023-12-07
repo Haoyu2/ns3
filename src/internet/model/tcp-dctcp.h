@@ -64,6 +64,10 @@ class TcpDctcp : public TcpLinuxReno
     // Documented in base class
     std::string GetName() const override;
 
+
+    double GetAlpha() const;
+
+
     /**
      * \brief Set configuration required by congestion control algorithm,
      *        This method will force DctcpEcn mode and will force usage of

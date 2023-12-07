@@ -68,7 +68,14 @@ TcpDctcp::GetName() const
     return "TcpDctcp";
 }
 
-TcpDctcp::TcpDctcp()
+double
+TcpDctcp::GetAlpha() const
+{
+    return m_alpha;
+}
+
+TcpDctcp::
+TcpDctcp()
     : TcpLinuxReno(),
       m_ackedBytesEcn(0),
       m_ackedBytesTotal(0),
@@ -83,7 +90,8 @@ TcpDctcp::TcpDctcp()
     NS_LOG_FUNCTION(this);
 }
 
-TcpDctcp::TcpDctcp(const TcpDctcp& sock)
+TcpDctcp::
+TcpDctcp(const TcpDctcp& sock)
     : TcpLinuxReno(sock),
       m_ackedBytesEcn(sock.m_ackedBytesEcn),
       m_ackedBytesTotal(sock.m_ackedBytesTotal),
@@ -101,7 +109,8 @@ TcpDctcp::TcpDctcp(const TcpDctcp& sock)
     NS_LOG_FUNCTION(this);
 }
 
-TcpDctcp::~TcpDctcp()
+TcpDctcp::~
+TcpDctcp()
 {
     NS_LOG_FUNCTION(this);
 }

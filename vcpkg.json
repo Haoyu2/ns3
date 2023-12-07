@@ -1,0 +1,13 @@
+{
+  "dependencies": [
+    {
+      "name": "eigen3"
+    },
+    {
+      "name": "harfbuzz"
+    },
+    {
+      "name": "gsl"
+    }
+  ]
+}

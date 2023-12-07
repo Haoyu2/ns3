@@ -30,11 +30,11 @@
 
 // The topology is roughly as follows
 //
-//  S1         S3
+//  S1 (10->R1) S3 (10->R1)
 //  |           |  (1 Gbps)
-//  T1 ------- T2 -- R1
+//  T1 ------- T2 -- R1 (20)
 //  |           |  (1 Gbps)
-//  S2         R2
+//  S2 (20)    R2 (20)
 //
 // The link between switch T1 and T2 is 10 Gbps.  All other
 // links are 1 Gbps.  In the SIGCOMM paper, there is a Scorpion switch
@@ -99,6 +99,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <sys/stat.h>
 
 using namespace ns3;
 
@@ -110,9 +111,17 @@ std::ofstream rxS3R1Throughput;
 std::ofstream fairnessIndex;
 std::ofstream t1QueueLength;
 std::ofstream t2QueueLength;
+std::ofstream s1Alpha;
 std::vector<uint64_t> rxS1R1Bytes;
 std::vector<uint64_t> rxS2R2Bytes;
 std::vector<uint64_t> rxS3R1Bytes;
+// std::unordered_map<>
+
+static void
+GetS1Alpha(NodeContainer S1,double m_alpha)
+{
+
+}
 
 void
 PrintProgress(Time interval)
@@ -334,8 +343,8 @@ main(int argc, char* argv[])
     Config::SetDefault("ns3::RedQueueDisc::MaxSize", QueueSizeValue(QueueSize("2666p")));
     // DCTCP tracks instantaneous queue length only; so set QW = 1
     Config::SetDefault("ns3::RedQueueDisc::QW", DoubleValue(1));
-    Config::SetDefault("ns3::RedQueueDisc::MinTh", DoubleValue(20));
-    Config::SetDefault("ns3::RedQueueDisc::MaxTh", DoubleValue(60));
+    Config::SetDefault("ns3::RedQueueDisc::MinTh", DoubleValue(40)); // origin: 20
+    Config::SetDefault("ns3::RedQueueDisc::MaxTh", DoubleValue(40)); // origin: 60
 
     PointToPointHelper pointToPointSR;
     pointToPointSR.SetDeviceAttribute("DataRate", StringValue("1Gbps"));
