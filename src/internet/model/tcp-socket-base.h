@@ -617,6 +617,7 @@ class TcpSocketBase : public TcpSocket
     typedef void (*TcpTxRxTracedCallback)(const Ptr<const Packet> packet,
                                           const TcpHeader& header,
                                           const Ptr<const TcpSocketBase> socket);
+    Ptr<TcpCongestionOps> GetCongestionControl() const;
 
   protected:
     // Implementing ns3::TcpSocket -- Attribute get/set
@@ -1362,6 +1363,7 @@ class TcpSocketBase : public TcpSocket
     uint32_t m_retxThresh{3};    //!< Fast Retransmit threshold
     bool m_limitedTx{true};      //!< perform limited transmit
 
+  protected:
     // Transmission Control Block
     Ptr<TcpSocketState> m_tcb;                 //!< Congestion control information
     Ptr<TcpCongestionOps> m_congestionControl; //!< Congestion control

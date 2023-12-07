@@ -288,6 +288,9 @@ class TcpL4Protocol : public IpL4Protocol
     IpL4Protocol::DownTargetCallback GetDownTarget() const override;
     IpL4Protocol::DownTargetCallback6 GetDownTarget6() const override;
 
+    TypeId GetCongestionTypeId() const;
+    std::unordered_map<uint64_t, Ptr<TcpSocketBase>> GetSockets() const;
+
   protected:
     void DoDispose() override;
 

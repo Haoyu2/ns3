@@ -64,9 +64,11 @@ class TcpDctcp : public TcpLinuxReno
     // Documented in base class
     std::string GetName() const override;
 
-
+    /**
+     * \brief estimate the amount of network congestion
+     * \return alpha
+     */
     double GetAlpha() const;
-
 
     /**
      * \brief Set configuration required by congestion control algorithm,

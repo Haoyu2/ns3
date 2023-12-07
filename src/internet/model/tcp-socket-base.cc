@@ -264,7 +264,8 @@ TcpSocketBase::GetInstanceTypeId() const
     return TcpSocketBase::GetTypeId();
 }
 
-TcpSocketBase::TcpSocketBase()
+TcpSocketBase::
+TcpSocketBase()
     : TcpSocket()
 {
     NS_LOG_FUNCTION(this);
@@ -324,7 +325,8 @@ TcpSocketBase::TcpSocketBase()
     NS_ASSERT(ok == true);
 }
 
-TcpSocketBase::TcpSocketBase(const TcpSocketBase& sock)
+TcpSocketBase::
+TcpSocketBase(const TcpSocketBase& sock)
     : TcpSocket(sock),
       // copy object::m_tid and socket::callbacks
       m_dupAckCount(sock.m_dupAckCount),
@@ -460,7 +462,8 @@ TcpSocketBase::TcpSocketBase(const TcpSocketBase& sock)
     NS_ASSERT(ok == true);
 }
 
-TcpSocketBase::~TcpSocketBase()
+TcpSocketBase::~
+TcpSocketBase()
 {
     NS_LOG_FUNCTION(this);
     m_node = nullptr;
@@ -4672,8 +4675,15 @@ TcpSocketBase::GetHighRxAck() const
     return m_highRxAckMark.Get();
 }
 
+Ptr<TcpCongestionOps>
+TcpSocketBase::GetCongestionControl() const
+{
+    return m_congestionControl;
+}
+
 // RttHistory methods
-RttHistory::RttHistory(SequenceNumber32 s, uint32_t c, Time t)
+RttHistory::
+RttHistory(SequenceNumber32 s, uint32_t c, Time t)
     : seq(s),
       count(c),
       time(t),
@@ -4681,7 +4691,8 @@ RttHistory::RttHistory(SequenceNumber32 s, uint32_t c, Time t)
 {
 }
 
-RttHistory::RttHistory(const RttHistory& h)
+RttHistory::
+RttHistory(const RttHistory& h)
     : seq(h.seq),
       count(h.count),
       time(h.time),

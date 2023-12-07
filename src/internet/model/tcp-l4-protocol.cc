@@ -103,14 +103,16 @@ TcpL4Protocol::GetTypeId()
     return tid;
 }
 
-TcpL4Protocol::TcpL4Protocol()
+TcpL4Protocol::
+TcpL4Protocol()
     : m_endPoints(new Ipv4EndPointDemux()),
       m_endPoints6(new Ipv6EndPointDemux())
 {
     NS_LOG_FUNCTION(this);
 }
 
-TcpL4Protocol::~TcpL4Protocol()
+TcpL4Protocol::~
+TcpL4Protocol()
 {
     NS_LOG_FUNCTION(this);
 }
@@ -802,6 +804,18 @@ IpL4Protocol::DownTargetCallback6
 TcpL4Protocol::GetDownTarget6() const
 {
     return m_downTarget6;
+}
+
+TypeId
+TcpL4Protocol::GetCongestionTypeId() const
+{
+    return m_congestionTypeId;
+}
+
+std::unordered_map<uint64_t, Ptr<TcpSocketBase>>
+TcpL4Protocol::GetSockets() const
+{
+    return m_sockets;
 }
 
 } // namespace ns3

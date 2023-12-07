@@ -115,20 +115,32 @@ std::ofstream s1Alpha;
 std::vector<uint64_t> rxS1R1Bytes;
 std::vector<uint64_t> rxS2R2Bytes;
 std::vector<uint64_t> rxS3R1Bytes;
+
 // std::unordered_map<>
 
-static void
-GetS1Alpha(NodeContainer S1,double m_alpha)
-{
-
-}
+// static void
+// GetS1Alpha(NodeContainer S1, double m_alpha)
+// {
+// }
 
 void
-PrintProgress(Time interval)
+PrintProgress(Time interval, NodeContainer& S1)
 {
+    // auto name = S1.Get(1)->GetObject<TcpL4Protocol>()->GetCongestionTypeId().GetName();
+    // auto sockets = S1.Get(1)->GetObject<TcpL4Protocol>()->GetSockets();
+    // std::cout << "tcpll4" << name << "\tsize:\t" << sockets.size() << std::endl;
+
+    // for (auto [id, socket] : sockets)
+    // {
+    //     std::cout << "====" << name << "\tid:" << id << "\tsocket:" << socket->GetSocketType()
+    //               << "\tCC:" << socket->GetCongestionControl()->GetName()
+    //               << "\tatt:" <<
+    //               DynamicCast<TcpDctcp>(socket->GetCongestionControl())->GetAlpha()
+    //               << std::endl;
+    // }
     std::cout << "Progress to " << std::fixed << std::setprecision(1)
               << Simulator::Now().GetSeconds() << " seconds simulation time" << std::endl;
-    Simulator::Schedule(interval, &PrintProgress, interval);
+    Simulator::Schedule(interval, &PrintProgress, interval, S1);
 }
 
 void
@@ -260,16 +272,28 @@ PrintFairness(Time measurementWindow)
 }
 
 void
-CheckT1QueueSize(Ptr<QueueDisc> queue)
+CheckT1QueueSize(Ptr<QueueDisc> queue, NodeContainer& S1)
 {
     // 1500 byte packets
     uint32_t qSize = queue->GetNPackets();
     Time backlog = Seconds(static_cast<double>(qSize * 1500 * 8) / 1e10); // 10 Gb/s
     // report size in units of packets and ms
     t1QueueLength << std::fixed << std::setprecision(2) << Simulator::Now().GetSeconds() << " "
-                  << qSize << " " << backlog.GetMicroSeconds() << std::endl;
+                  << qSize << " " << backlog.GetMicroSeconds() << " ";
+    for (int i = 0; i < S1.GetN(); ++i)
+    {
+        auto sockets = S1.Get(i)->GetObject<TcpL4Protocol>()->GetSockets();
+        for (auto [i, socket] : sockets)
+        {
+            auto dctcp = DynamicCast<TcpDctcp>(socket->GetCongestionControl());
+            t1QueueLength << dctcp->GetAlpha() << ",";
+        }
+        t1QueueLength << " ";
+    }
+
+    t1QueueLength << std::endl;
     // check queue size every 1/100 of a second
-    Simulator::Schedule(MilliSeconds(10), &CheckT1QueueSize, queue);
+    Simulator::Schedule(MilliSeconds(10), &CheckT1QueueSize, queue, S1);
 }
 
 void
@@ -582,13 +606,14 @@ main(int argc, char* argv[])
     Simulator::Schedule(flowStartupWindow + convergenceTime + measurementWindow,
                         &PrintFairness,
                         measurementWindow);
-    Simulator::Schedule(progressInterval, &PrintProgress, progressInterval);
-    Simulator::Schedule(flowStartupWindow + convergenceTime, &CheckT1QueueSize, queueDiscs1.Get(0));
+    Simulator::Schedule(progressInterval, &PrintProgress, progressInterval, S1);
+    Simulator::Schedule(flowStartupWindow + convergenceTime,
+                        &CheckT1QueueSize,
+                        queueDiscs1.Get(0),
+                        S1);
     Simulator::Schedule(flowStartupWindow + convergenceTime, &CheckT2QueueSize, queueDiscs2.Get(0));
     Simulator::Stop(stopTime + TimeStep(1));
-
     Simulator::Run();
-
     rxS1R1Throughput.close();
     rxS2R2Throughput.close();
     rxS3R1Throughput.close();
@@ -596,5 +621,6 @@ main(int argc, char* argv[])
     t1QueueLength.close();
     t2QueueLength.close();
     Simulator::Destroy();
+
     return 0;
 }
