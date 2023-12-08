@@ -39,7 +39,7 @@ else()
 endif()
 
 # this is dealing with arm
-if (CMAKE_SYSTEM_PROCESSOR)
+if (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
   set(VCPKG_TARGET_ARCH ${CMAKE_SYSTEM_PROCESSOR})
 endif ()
 
