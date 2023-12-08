@@ -285,7 +285,7 @@ CheckT1QueueSize(Ptr<QueueDisc> queue, NodeContainer& S1)
     for (int i = 0; i < S1.GetN(); ++i)
     {
         auto sockets = S1.Get(i)->GetObject<TcpL4Protocol>()->GetSockets();
-        for (auto [i, socket] : sockets)
+        for (auto [id, socket] : sockets)
         {
             auto dctcp = DynamicCast<TcpDctcp>(socket->GetCongestionControl());
             t1QueueLength << dctcp->GetAlpha() << ",";

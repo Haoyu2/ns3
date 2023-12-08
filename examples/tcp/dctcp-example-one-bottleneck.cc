@@ -104,29 +104,19 @@
 
 using namespace ns3;
 
-int FlowN = 2;
+std::size_t FlowN = 20;
 
 std::stringstream filePlotQueue1;
 std::stringstream filePlotQueue2;
-std::ofstream rxS1R1Throughput;
 std::ofstream rxS2R2Throughput;
-std::ofstream rxS3R1Throughput;
 std::ofstream fairnessIndex;
 std::ofstream t1QueueLength;
 std::ofstream t2QueueLength;
 std::ofstream s1Alpha;
 std::vector<uint64_t> rxS2R2Bytes;
-std::vector<uint64_t> rxBytes;
-
-// std::unordered_map<>
-
-// static void
-// GetS1Alpha(NodeContainer S1, double m_alpha)
-// {
-// }
 
 void
-PrintProgress(Time interval, NodeContainer& S1)
+PrintProgress(Time interval, NodeContainer& S)
 {
     // auto name = S1.Get(1)->GetObject<TcpL4Protocol>()->GetCongestionTypeId().GetName();
     // auto sockets = S1.Get(1)->GetObject<TcpL4Protocol>()->GetSockets();
@@ -142,7 +132,7 @@ PrintProgress(Time interval, NodeContainer& S1)
     // }
     std::cout << "Progress to " << std::fixed << std::setprecision(1)
               << Simulator::Now().GetSeconds() << " seconds simulation time" << std::endl;
-    Simulator::Schedule(interval, &PrintProgress, interval, S1);
+    Simulator::Schedule(interval, &PrintProgress, interval, S);
 }
 
 void
@@ -188,7 +178,7 @@ PrintFairness(Time measurementWindow)
     sumSquares = 0;
     sum = 0;
     fairness = 0;
-    for (std::size_t i = 0; i < 20; i++)
+    for (std::size_t i = 0; i < FlowN; i++)
     {
         sum += rxS2R2Bytes[i];
         sumSquares += (rxS2R2Bytes[i] * rxS2R2Bytes[i]);
@@ -201,7 +191,7 @@ PrintFairness(Time measurementWindow)
 
     sum = 0;
 
-    for (std::size_t i = 0; i < 20; i++)
+    for (std::size_t i = 0; i < FlowN; i++)
     {
         sum += rxS2R2Bytes[i];
     }
@@ -210,7 +200,7 @@ PrintFairness(Time measurementWindow)
 }
 
 void
-CheckT1QueueSize(Ptr<QueueDisc> queue, NodeContainer& S1)
+CheckT1QueueSize(Ptr<QueueDisc> queue, NodeContainer& Senders)
 {
     auto redQ = DynamicCast<RedQueueDisc>(queue);
 
@@ -220,10 +210,10 @@ CheckT1QueueSize(Ptr<QueueDisc> queue, NodeContainer& S1)
     // report size in units of packets and ms
     t1QueueLength << std::fixed << std::setprecision(2) << Simulator::Now().GetSeconds() << " "
                   << qSize << " " << backlog.GetMicroSeconds() << " ";
-    for (int i = 0; i < S1.GetN(); ++i)
+    for (uint32_t i = 0; i < Senders.GetN(); ++i)
     {
-        auto sockets = S1.Get(i)->GetObject<TcpL4Protocol>()->GetSockets();
-        for (auto [i, socket] : sockets)
+        auto sockets = Senders.Get(i)->GetObject<TcpL4Protocol>()->GetSockets();
+        for (auto [id, socket] : sockets)
         {
             auto dctcp = DynamicCast<TcpDctcp>(socket->GetCongestionControl());
             t1QueueLength << dctcp->GetAlpha() << ",";
@@ -233,7 +223,7 @@ CheckT1QueueSize(Ptr<QueueDisc> queue, NodeContainer& S1)
 
     t1QueueLength << std::endl;
     // check queue size every 1/100 of a second
-    Simulator::Schedule(MilliSeconds(10), &CheckT1QueueSize, queue, S1);
+    Simulator::Schedule(MilliSeconds(10), &CheckT1QueueSize, queue, Senders);
 }
 
 void
@@ -252,9 +242,6 @@ int
 main(int argc, char* argv[])
 {
     clock_t start_time = clock();
-
-    fmt::println("heeo");
-    return 0;
 
     std::cout << PROJECT_SOURCE_PATH;
     std::string outputFilePath = ".";
@@ -281,15 +268,14 @@ main(int argc, char* argv[])
     Time startTime = Seconds(0);
     Time stopTime = flowStartupWindow + convergenceTime + measurementWindow;
 
-    rxBytes.reserve(FlowN);
     rxS2R2Bytes.reserve(FlowN);
 
-    NodeContainer S2;
-    NodeContainer R2;
+    NodeContainer Senders;
+    NodeContainer Receivers;
     Ptr<Node> T1 = CreateObject<Node>();
     Ptr<Node> T2 = CreateObject<Node>();
-    S2.Create(FlowN);
-    R2.Create(FlowN);
+    Senders.Create(FlowN);
+    Receivers.Create(FlowN);
 
     Config::SetDefault("ns3::TcpSocket::SegmentSize", UintegerValue(1448));
     Config::SetDefault("ns3::TcpSocket::DelAckCount", UintegerValue(2));
@@ -308,38 +294,35 @@ main(int argc, char* argv[])
     Config::SetDefault("ns3::RedQueueDisc::MaxSize", QueueSizeValue(QueueSize("2666p")));
     // DCTCP tracks instantaneous queue length only; so set QW = 1
     Config::SetDefault("ns3::RedQueueDisc::QW", DoubleValue(1));
-    Config::SetDefault("ns3::RedQueueDisc::MinTh", DoubleValue(40)); // origin: 20
-    Config::SetDefault("ns3::RedQueueDisc::MaxTh", DoubleValue(40)); // origin: 60
+    Config::SetDefault("ns3::RedQueueDisc::MinTh", DoubleValue(20)); // origin: 20
+    Config::SetDefault("ns3::RedQueueDisc::MaxTh", DoubleValue(60)); // origin: 60
 
     PointToPointHelper pointToPointSR;
-    pointToPointSR.SetDeviceAttribute("DataRate", StringValue("10Gbps"));
+    pointToPointSR.SetDeviceAttribute("DataRate", StringValue("1Gbps"));
     pointToPointSR.SetChannelAttribute("Delay", StringValue("10us"));
 
     PointToPointHelper pointToPointT;
     pointToPointT.SetDeviceAttribute("DataRate", StringValue("10Gbps"));
     pointToPointT.SetChannelAttribute("Delay", StringValue("10us"));
 
-    // PointToPointHelper pointToPointSR;
-    // pointToPointT.SetDeviceAttribute("DataRate", StringValue("10Gbps"));
-    // pointToPointT.SetChannelAttribute("Delay", StringValue("10us"));
 
-    std::vector<NetDeviceContainer> S2T1;
-    S2T1.reserve(FlowN);
+    std::vector<NetDeviceContainer> ST1;
+    ST1.reserve(FlowN);
 
-    std::vector<NetDeviceContainer> R2T2;
-    R2T2.reserve(FlowN);
+    std::vector<NetDeviceContainer> RT2;
+    RT2.reserve(FlowN);
     NetDeviceContainer T1T2 = pointToPointT.Install(T1, T2);
 
     for (std::size_t i = 0; i < FlowN; i++)
     {
-        Ptr<Node> n = S2.Get(i);
-        S2T1.push_back(pointToPointSR.Install(n, T1));
+        Ptr<Node> n = Senders.Get(i);
+        ST1.push_back(pointToPointSR.Install(n, T1));
     }
 
     for (std::size_t i = 0; i < FlowN; i++)
     {
-        Ptr<Node> n = R2.Get(i);
-        R2T2.push_back(pointToPointSR.Install(n, T2));
+        Ptr<Node> n = Receivers.Get(i);
+        RT2.push_back(pointToPointSR.Install(n, T2));
     }
 
     InternetStackHelper stack;
@@ -364,7 +347,7 @@ main(int argc, char* argv[])
     // This yields a target queue depth of 250us at 1 Gb/s
     tchRed1.SetRootQueueDisc("ns3::RedQueueDisc",
                              "LinkBandwidth",
-                             StringValue("10Gbps"),
+                             StringValue("1Gbps"),
                              "LinkDelay",
                              StringValue("10us"),
                              "MinTh",
@@ -374,12 +357,12 @@ main(int argc, char* argv[])
 
     for (std::size_t i = 0; i < FlowN; i++)
     {
-        tchRed1.Install(S2T1[i].Get(1));
+        tchRed1.Install(ST1[i].Get(1));
     }
 
     for (std::size_t i = 0; i < FlowN; i++)
     {
-        tchRed1.Install(R2T2[i].Get(1));
+        tchRed1.Install(RT2[i].Get(1));
     }
 
     Ipv4AddressHelper address;
@@ -396,7 +379,7 @@ main(int argc, char* argv[])
     address.SetBase("10.2.1.0", "255.255.255.0");
     for (std::size_t i = 0; i < FlowN; i++)
     {
-        ipS2T1.push_back(address.Assign(S2T1[i]));
+        ipS2T1.push_back(address.Assign(ST1[i]));
         address.NewNetwork();
     }
     address.SetBase("10.3.1.0", "255.255.255.0");
@@ -404,7 +387,7 @@ main(int argc, char* argv[])
     address.SetBase("10.4.1.0", "255.255.255.0");
     for (std::size_t i = 0; i < FlowN; i++)
     {
-        ipR2T2.push_back(address.Assign(R2T2[i]));
+        ipR2T2.push_back(address.Assign(RT2[i]));
         address.NewNetwork();
     }
 
@@ -418,7 +401,7 @@ main(int argc, char* argv[])
         uint16_t port = 50000 + i;
         Address sinkLocalAddress(InetSocketAddress(Ipv4Address::GetAny(), port));
         PacketSinkHelper sinkHelper("ns3::TcpSocketFactory", sinkLocalAddress);
-        ApplicationContainer sinkApp = sinkHelper.Install(R2.Get(i));
+        ApplicationContainer sinkApp = sinkHelper.Install(Receivers.Get(i));
         Ptr<PacketSink> packetSink = sinkApp.Get(0)->GetObject<PacketSink>();
         r2Sinks.push_back(packetSink);
         sinkApp.Start(startTime);
@@ -435,22 +418,19 @@ main(int argc, char* argv[])
         ApplicationContainer clientApps1;
         AddressValue remoteAddress(InetSocketAddress(ipR2T2[i].GetAddress(0), port));
         clientHelper1.SetAttribute("Remote", remoteAddress);
-        clientApps1.Add(clientHelper1.Install(S2.Get(i)));
+        clientApps1.Add(clientHelper1.Install(Senders.Get(i)));
         clientApps1.Start(i * flowStartupWindow / 20 + startTime + MilliSeconds(i * 5));
         clientApps1.Stop(stopTime);
     }
 
-    rxS1R1Throughput.open("dctcp-example-one-bottlenect-s1-r1-throughput.dat", std::ios::out);
-    rxS1R1Throughput << "#Time(s) flow thruput(Mb/s)" << std::endl;
-    rxS2R2Throughput.open("dctcp-example-one-bottlenect-s2-r2-throughput.dat", std::ios::out);
+
+    rxS2R2Throughput.open(fmt::format("{}-dctcp-example-one-bottlenect-s2-r2-throughput.dat", FlowN), std::ios::out);
     rxS2R2Throughput << "#Time(s) flow thruput(Mb/s)" << std::endl;
-    rxS3R1Throughput.open("dctcp-example-one-bottlenect-s3-r1-throughput.dat", std::ios::out);
-    rxS3R1Throughput << "#Time(s) flow thruput(Mb/s)" << std::endl;
-    fairnessIndex.open("dctcp-example-one-bottlenect-fairness.dat", std::ios::out);
-    t1QueueLength.open("dctcp-example-one-bottlenect-t1-length.dat", std::ios::out);
+
+
+    t1QueueLength.open(fmt::format("{}-dctcp-example-one-bottlenect-t1-length.dat", FlowN), std::ios::out);
     t1QueueLength << "#Time(s) qlen(pkts) qlen(us)" << std::endl;
-    t2QueueLength.open("dctcp-example-one-bottlenect-t2-length.dat", std::ios::out);
-    t2QueueLength << "#Time(s) qlen(pkts) qlen(us)" << std::endl;
+
 
     for (std::size_t i = 0; i < FlowN; i++)
     {
@@ -458,18 +438,21 @@ main(int argc, char* argv[])
     }
 
     Simulator::Schedule(flowStartupWindow + convergenceTime, &InitializeCounters);
+
     Simulator::Schedule(flowStartupWindow + convergenceTime + measurementWindow,
                         &PrintThroughput,
                         measurementWindow);
-    Simulator::Schedule(flowStartupWindow + convergenceTime + measurementWindow,
-                        &PrintFairness,
-                        measurementWindow);
+
+
+    Simulator::Schedule(progressInterval, &PrintProgress, progressInterval, Senders);
+    Simulator::Schedule(flowStartupWindow + convergenceTime,
+                        &CheckT1QueueSize,
+                        queueDiscs1.Get(0),
+                        Senders);
 
     Simulator::Stop(stopTime + TimeStep(1));
     Simulator::Run();
-    rxS1R1Throughput.close();
     rxS2R2Throughput.close();
-    rxS3R1Throughput.close();
     fairnessIndex.close();
     t1QueueLength.close();
     t2QueueLength.close();
