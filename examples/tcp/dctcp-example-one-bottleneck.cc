@@ -104,7 +104,7 @@
 
 using namespace ns3;
 
-std::size_t FlowN = 20;
+std::size_t FlowN = 10;
 
 std::stringstream filePlotQueue1;
 std::stringstream filePlotQueue2;

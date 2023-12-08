@@ -23,4 +23,5 @@ set(ns3rc_tests_enabled ON)
 
 #set(NS3_ENABLE_BUILD_VERSION ON)
 set(NS3_VCPKG ON)
+set(NS3_MPI ON)
 
