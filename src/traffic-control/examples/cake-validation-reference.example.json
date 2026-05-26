@@ -1,0 +1,16 @@
+{
+  "_comment": "TEMPLATE with SYNTHETIC placeholder numbers. Replace linux_cake with values measured by Flent's rrul test against a real Linux box running tc cake (see the 'Validation against Linux sch_cake' section of doc/cake.rst). Throughput in Mbps; RTT percentiles in milliseconds.",
+  "scenario": {
+    "bandwidth_mbps": 10,
+    "rtt_ms": 40,
+    "nflows": 4
+  },
+  "linux_cake": {
+    "down_mbps": 9.4,
+    "up_mbps": 9.4,
+    "rtt_p50_ms": 41.0,
+    "rtt_p90_ms": 43.0,
+    "rtt_p99_ms": 45.0
+  },
+  "source": "SYNTHETIC EXAMPLE -- replace with: flent rrul, Linux 6.x, tc cake bandwidth 10Mbit, netem 40ms"
+}

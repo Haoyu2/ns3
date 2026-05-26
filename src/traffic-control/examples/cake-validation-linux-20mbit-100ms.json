@@ -1,0 +1,15 @@
+{
+  "scenario": {
+    "bandwidth_mbps": 20.0,
+    "rtt_ms": 100.0,
+    "nflows": 4
+  },
+  "linux_cake": {
+    "down_mbps": 18.08,
+    "up_mbps": 18.07,
+    "rtt_p50_ms": 101.0,
+    "rtt_p90_ms": 102.0,
+    "rtt_p99_ms": 102.98
+  },
+  "source": "flent rrul, /home/haoyu/linux-cake-20-100.flent.gz"
+}

@@ -1,4 +1,5 @@
 set(source_files
+    helper/cake-ack-identifier.cc
     helper/internet-stack-helper.cc
     helper/internet-trace-helper.cc
     helper/ipv4-address-helper.cc
@@ -130,6 +131,7 @@ set(source_files
 )
 
 set(header_files
+    helper/cake-ack-identifier.h
     helper/internet-stack-helper.h
     helper/internet-trace-helper.h
     helper/ipv4-address-helper.h

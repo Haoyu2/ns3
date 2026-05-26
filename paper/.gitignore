@@ -1,0 +1,14 @@
+# LaTeX build artifacts (regenerable)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+*.pdf
+
+# The root .gitignore ignores *.dat globally; the paper's figure data files
+# (CDFs, validation scatter, AQM latency) are NOT build artifacts -- keep them.
+!*.dat
