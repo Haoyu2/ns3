@@ -51,7 +51,7 @@ active queue management (AQM), DiffServ prioritisation, ACK filtering and
 host-level fairness into a single qdisc. Despite CAKE's prominence, the ns-3
 network simulator has lacked a model of it, forcing researchers to approximate
 it with the simulator's existing flow-queueing AQMs. We present the first ns-3
-model of CAKE, implemented in the \texttt{traffic-control} module. The model
+model of CAKE to our knowledge, implemented in the \texttt{traffic-control} module. The model
 reuses ns-3's existing COBALT AQM for per-flow dropping and adds CAKE's
 distinctive mechanisms: a deficit-mode (virtual-clock) shaper, DiffServ
 ``tins'' with per-tin rate caps, ACK filtering, and host-fair triple isolation.
@@ -255,7 +255,10 @@ tin that is ``due'', and if none is due it lets the least over-budget tin borrow
 idle capacity (work conserving). This caps each tin to its rate share while
 giving latency-sensitive tins lower delay. In unlimited mode there is no total
 rate to apportion, so the scheduler falls back to priority plus weighted DRR.
-Algorithm~\ref{alg:dequeue} states the shaping-mode dequeue procedure.
+Algorithm~\ref{alg:dequeue} states the shaping-mode dequeue procedure, and
+Algorithm~\ref{alg:enqueue} gives the enqueue counterpart---tin classification,
+lazy flow creation, the host-counter update (lines 4--7), and the ACK-filter
+mark performed by \textproc{TryAckFilter}.
 
 \begin{algorithm}[t]
 \caption{CAKE dequeue with per-tin rate caps (shaping mode). $R$ is the
@@ -285,6 +288,44 @@ $T.t_{\text{next}}$ are the global and per-tin shaper clocks.}
     \State \Return $p$
   \EndIf \Comment{tin drained: reconsider}
 \EndLoop
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{CAKE enqueue. Flow hashing, lazy flow creation, and \textproc{CakeDrop}
+on overflow are inherited from \textsc{FqCobalt}; the host-counter update
+(lines 4--7) and the \textproc{TryAckFilter} subroutine are the CAKE-specific
+additions. The mark set on line~24 is consumed lazily on dequeue by
+\textproc{DequeueFlowDRR} of Algorithm~\ref{alg:dequeue}.}
+\label{alg:enqueue}
+\begin{algorithmic}[1]
+\State $h \gets$ flow hash of $\mathit{item}$ \Comment{5-tuple or a packet filter}
+\State $T \gets m_{\mathit{tins}}[\,\textproc{Priomap}[\textproc{SockPrio}(\mathit{item})]\,]$
+\State $f \gets T.\mathit{flow}[h]$ \Comment{created lazily on miss}
+\If{$f.\mathit{status} = \mathit{Inactive}$}
+  \If{a host classifier is set}
+    \State $(s, d) \gets \textproc{HostClassifier}(\mathit{item})$
+    \State $f.\textproc{SetHosts}(s, d)$;\, $T.\mathit{srcCnt}[s]{\,+\!\!+}$;\, $T.\mathit{dstCnt}[d]{\,+\!\!+}$
+  \EndIf
+  \State $f.\mathit{status} \gets \mathit{NewFlow}$;\, $f.\mathit{deficit} \gets \textproc{GrantQuantum}(T, f)$
+  \State append $f$ to $T.\mathit{newFlows}$
+\EndIf
+\State $f.\mathit{queue}.\textproc{Enqueue}(\mathit{item})$ \Comment{the flow's COBALT}
+\If{ACK filtering is on and an ACK identifier is set}
+  \State \Call{TryAckFilter}{$f, \mathit{item}$}
+\EndIf
+\If{$\textproc{Size}() > \textproc{MaxSize}()$} \textproc{CakeDrop}() \EndIf
+\State \Return $\top$
+\Statex
+\Procedure{TryAckFilter}{$f, \mathit{item}$}
+  \If{$\neg\,\textproc{AckIdentifier}(\mathit{item}, \mathit{ackNo})$}
+    \State \Return \Comment{not a pure ACK}
+  \EndIf
+  \If{$f.\mathit{hasLastAck} \wedge \mathit{ackNo} \ge f.\mathit{lastAckNo}$}
+    \State $f.\textproc{MarkFiltered}(f.\mathit{lastAckUid})$ \Comment{older ACK now redundant}
+  \EndIf
+  \State $f.\textproc{SetLastAck}(\mathit{item}.\mathit{uid}, \mathit{ackNo})$
+\EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
@@ -555,14 +596,38 @@ whereas the unmanaged FIFO bloats severely---nearly 400~ms at 10~Mbit/s.}
 \end{figure}
 
 \paragraph{Shaping and bufferbloat control.} A second example uses CAKE as the
-bottleneck rather than just as an AQM: it installs CAKE as a $10$~Mbit/s shaper
-on a $100$~Mbit/s link with three long-lived Cubic flows ($22$~ms base RTT).
-The deficit-mode shaper holds the aggregate at the configured $10$~Mbit/s, the
-three flows share the link to within a few percent, and the FlowMonitor mean
-per-flow delay stays at roughly the base RTT---only a few milliseconds of
-queueing on top of the propagation delay. This is the same mechanism the
-validation experiment of Section~\ref{sec:validation} uses, just with the
-shaper, rather than the link, as the bottleneck.
+bottleneck rather than just as an AQM: CAKE is installed as a $10$~Mbit/s
+shaper on a $100$~Mbit/s link, with three long-lived Cubic flows and a $22$~ms
+base RTT. Table~\ref{tab:bufferbloat} reports the steady-state result of a
+$30$~s run. The deficit-mode shaper holds the aggregate at $9.01$~Mbit/s---
+about $90\%$ of the configured rate, the remainder ceded to TCP backoff after
+$483$ COBALT drops over the run---and the three flows share that aggregate
+with a Jain's-fairness index of $0.995$. The mean one-way delay sits at
+$\approx 18.6$~ms, only about $7$~ms above the $11$~ms base one-way
+propagation: COBALT's $5$~ms target is honoured under saturation, and CAKE
+prevents the standing queue from growing. The mechanism is the same one the
+validation experiment of Section~\ref{sec:validation} exercises---just with
+the shaper, rather than the link, as the bottleneck.
+
+\begin{table}[t]
+\caption{CAKE as a $10$~Mbit/s shaper on a $100$~Mbit/s link: three long-lived
+Cubic flows, $22$~ms base RTT, $30$~s run. Throughput is FlowMonitor's
+aggregate; ``mean delay'' is FlowMonitor's per-flow one-way delay (base one-way
+is $11$~ms).}
+\label{tab:bufferbloat}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Flow & Throughput (Mbit/s) & Mean one-way delay (ms)\\
+\midrule
+1         & 3.19 & 18.55\\
+2         & 2.71 & 18.81\\
+3         & 3.11 & 18.56\\
+\midrule
+Aggregate / mean & 9.01 & 18.64\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Host fairness.} The host-fairness unit test backlogs three flows that
 share a single tin: two from source host~A (towards two different destinations)
@@ -657,7 +722,11 @@ contains a handful of outliers that a deterministic simulator does not
 generate---a useful reminder that faithful AQM behaviour and real-system
 jitter are separate axes of fidelity. Both observations point to concrete next
 steps. The model, its unit tests, runnable examples and a reproducible
-validation harness are released for inclusion in ns-3.
+validation harness are released for inclusion in ns-3.\footnote{Sources for
+the model, validation harness, and committed Linux references are on the
+\texttt{ns3-summer-2026} branch; reviewers can start from the guided
+README at
+\url{https://github.com/Haoyu2/ns3/blob/ns3-summer-2026/README-CAKE.md}.}
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}

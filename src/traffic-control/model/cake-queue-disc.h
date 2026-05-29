@@ -191,7 +191,7 @@ struct CakeTin
  *
  * Implemented so far:
  *  - flow isolation: per-flow CobaltQueueDisc behind a (set-associative) hash,
- *    scheduled with deficit round robin (DRR);
+ *    scheduled with deficit round-robin (DRR);
  *  - a deficit-mode shaper driven by the Bandwidth attribute;
  *  - DiffServ "tins": multiple priority classes, each with its own flow queues,
  *    classified by SocketPriorityTag and scheduled by priority with per-tin
@@ -396,7 +396,7 @@ class CakeQueueDisc : public QueueDisc
     bool m_hostFairness{false};      //!< whether host-fair scheduling is enabled
 
     // Deficit-mode shaper (virtual clock); inactive when m_bandwidth is 0 bps
-    Time m_timeNextPacket; //!< earliest time the next packet may be dequeued
+    Time m_timeNextPacket; //!< the earliest time the next packet may be dequeued
     EventId m_shaperWake;  //!< scheduled wake-up while the shaper is throttling
 };
 

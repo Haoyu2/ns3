@@ -4,10 +4,13 @@
 *.blg
 *.fdb_latexmk
 *.fls
+*.nav
 *.out
+*.snm
 *.synctex.gz
 *.toc
 *.pdf
+*.vrb
 
 # The root .gitignore ignores *.dat globally; the paper's figure data files
 # (CDFs, validation scatter, AQM latency) are NOT build artifacts -- keep them.
