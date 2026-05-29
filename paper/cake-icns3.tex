@@ -67,7 +67,10 @@ concrete limitation (a non-rate-adaptive AQM target). We further compare CAKE to
 ns-3's existing AQMs and reproduce its expected bufferbloat-control, fairness and
 ACK-filtering behaviours---the last cutting the 99th-percentile latency on an
 asymmetric link by $6\times$. The model ships with unit tests, runnable examples, and a
-reproducible Linux validation harness.
+reproducible Linux validation harness; sources, validation harness and the
+committed Linux references are available on the
+\texttt{ns3-summer-2026} branch of our repository.\footnote{Guided README:
+\url{https://github.com/Haoyu2/ns3/blob/ns3-summer-2026/README.md}}
 \end{abstract}
 
 \keywords{ns-3, CAKE, active queue management, bufferbloat, AQM, fairness}
@@ -722,11 +725,7 @@ contains a handful of outliers that a deterministic simulator does not
 generate---a useful reminder that faithful AQM behaviour and real-system
 jitter are separate axes of fidelity. Both observations point to concrete next
 steps. The model, its unit tests, runnable examples and a reproducible
-validation harness are released for inclusion in ns-3.\footnote{Sources for
-the model, validation harness, and committed Linux references are on the
-\texttt{ns3-summer-2026} branch; reviewers can start from the guided
-README at
-\url{https://github.com/Haoyu2/ns3/blob/ns3-summer-2026/README.md}.}
+validation harness are released for inclusion in ns-3.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
