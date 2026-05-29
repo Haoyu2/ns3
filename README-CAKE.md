@@ -108,9 +108,9 @@ Full step-by-step capture instructions are in the
 [`examples/README.md`](src/traffic-control/examples/README.md) and in
 [`src/traffic-control/doc/cake.rst`](src/traffic-control/doc/cake.rst).
 
-## Paper and slides
+## Docs and Results
 
-The paper and slides are LaTeX (acmart, pgfplots). Build from `paper/`:
+The paper is LaTeX (acmart, pgfplots). Build from `paper/`:
 
 ```sh
 cd paper
