@@ -1,283 +1,148 @@
-# The Network Simulator, Version 3
+# ns-3 CAKE — Comprehensive Queue Management Discipline
 
-[![codecov](https://codecov.io/gh/nsnam/ns-3-dev-git/branch/master/graph/badge.svg)](https://codecov.io/gh/nsnam/ns-3-dev-git/branch/master/)
-[![Gitlab CI](https://gitlab.com/nsnam/ns-3-dev/badges/master/pipeline.svg)](https://gitlab.com/nsnam/ns-3-dev/-/pipelines)
-[![Github CI](https://github.com/nsnam/ns-3-dev-git/actions/workflows/per_commit.yml/badge.svg)](https://github.com/nsnam/ns-3-dev-git/actions)
+This branch (`ns3-summer-2026`) adds the **first model of CAKE** to ns-3.
+CAKE (Common Applications Kept Enhanced) is the state-of-the-art queue
+discipline behind OpenWrt's Smart Queue Management, widely deployed on home
+gateways. It integrates rate shaping, per-flow active queue management,
+DiffServ prioritisation, ACK filtering, and host-fair triple isolation into a
+single qdisc. Until now ns-3 had every other modern AQM but not CAKE; this
+work closes that gap and validates the model against Linux `sch_cake` using
+Flent's *rrul* test.
 
-[![Latest Release](https://gitlab.com/nsnam/ns-3-dev/-/badges/release.svg)](https://gitlab.com/nsnam/ns-3-dev/-/releases)
+The model is implemented in the `traffic-control` module by reusing the
+existing COBALT AQM. Two header-aware mechanisms (ACK filtering and host
+fairness) are wired up through **injected callbacks**, so the model never
+references types in the `internet` module — a small pattern that respects
+ns-3's module layering and that may be useful when porting other
+header-aware Linux qdiscs.
 
-## License
+> The upstream ns-3 project README (build prerequisites, supported
+> platforms, manual pointers) is preserved verbatim as
+> [`README-ns3.md`](README-ns3.md).
 
-This software is licensed under the terms of the GNU General Public License v2.0 only (GPL-2.0-only).
-See the LICENSE file for more details.
+## What lives where
 
-## Table of Contents
+```
+src/traffic-control/
+├── model/cake-queue-disc.{h,cc}            # the CAKE model
+├── model/README.md                         # developer notes on the model
+├── test/cake-queue-disc-test-suite.cc      # 8 unit tests
+├── test/README.md                          # per-test description
+├── examples/cake-*.{cc,py,sh,json}         # examples + validation harness
+├── examples/README.md                      # per-script description
+└── doc/cake.rst                            # Sphinx user docs
 
-* [Overview](#overview-an-open-source-project)
-* [Software overview](#software-overview)
-* [Getting ns-3](#getting-ns-3)
-* [Building ns-3](#building-ns-3)
-* [Testing ns-3](#testing-ns-3)
-* [Running ns-3](#running-ns-3)
-* [ns-3 Documentation](#ns-3-documentation)
-* [Working with the Development Version of ns-3](#working-with-the-development-version-of-ns-3)
-* [Contributing to ns-3](#contributing-to-ns-3)
-* [Reporting Issues](#reporting-issues)
-* [Asking Questions](#asking-questions)
-* [ns-3 App Store](#ns-3-app-store)
+src/internet/helper/
+└── cake-ack-identifier.{h,cc}              # internet-side header helpers:
+                                            # MakeTcpAckIdentifier()
+                                            # MakeIpv4HostClassifier()
 
-> **NOTE**: Much more substantial information about ns-3 can be found at
-<https://www.nsnam.org>
-
-## Overview: An Open Source Project
-
-ns-3 is a free open source project aiming to build a discrete-event
-network simulator targeted for simulation research and education.
-This is a collaborative project; we hope that
-the missing pieces of the models we have not yet implemented
-will be contributed by the community in an open collaboration
-process. If you would like to contribute to ns-3, please check
-the [Contributing to ns-3](#contributing-to-ns-3) section below.
-
-This README excerpts some details from a more extensive
-tutorial that is maintained at:
-<https://www.nsnam.org/documentation/latest/>
-
-## Software overview
-
-From a software perspective, ns-3 consists of a number of C++
-libraries organized around different topics and technologies.
-Programs that actually run simulations can be written in
-either C++ or Python; the use of Python is enabled by
-[runtime C++/Python bindings](https://cppyy.readthedocs.io/en/latest/).  Simulation programs will
-typically link or import the ns `core` library and any additional
-libraries that they need.  ns-3 requires a modern C++ compiler
-installation (g++ or clang++) and the [CMake](https://cmake.org) build system.
-Most ns-3 programs are single-threaded; there is some limited
-support for parallelization using the [MPI](https://www.nsnam.org/docs/models/html/distributed.html) framework.
-ns-3 can also run in a real-time emulation mode by binding to an
-Ethernet device on the host machine and generating and consuming
-packets on an actual network.  The ns-3 APIs are documented
-using [Doxygen](https://www.doxygen.nl).
-
-The code for the framework and the default models provided
-by ns-3 is built as a set of libraries. The libraries maintained
-by the open source project can be found in the `src` directory.
-Users may extend ns-3 by adding libraries to the build;
-third-party libraries can be found on the [ns-3 App Store](https://www.nsnam.org)
-or elsewhere in public Git repositories, and are usually added to the `contrib` directory.
-
-## Getting ns-3
-
-ns-3 can be obtained by either downloading a released source
-archive, or by cloning the project's
-[Git repository](https://gitlab.com/nsnam/ns-3-dev.git).
-
-Starting with ns-3 release version 3.45, there are two versions
-of source archives that are published with each release:
-
-1. ns-3.##.tar.bz2
-1. ns-allinone-3.##.tar.bz2
-
-The first archive is simply a compressed archive of the same code
-that one can obtain by checking out the release tagged code from
-the ns-3-dev Git repository.  The second archive consists of
-ns-3 plus additional contributed modules that are maintained outside
-of the main ns-3 open source project but that have been reviewed
-by maintainers and lightly tested for compatibility with the
-release.  The contributed modules included in the `allinone` release
-will change over time as new third-party libraries emerge while others
-may lose compatibility with the ns-3 mainline (e.g., if they become
-unmaintained).
-
-## Building ns-3
-
-As mentioned above, ns-3 uses the CMake build system, but
-the project maintains a customized wrapper around CMake
-called the `ns3` tool.  This tool provides a
-[Waf-like](https://waf.io) API
-to the underlying CMake build manager.
-To build the set of default libraries and the example
-programs included in this package, you need to use the
-`ns3` tool. This tool provides a Waf-like API to the
-underlying CMake build manager.
-Detailed information on how to use `ns3` is included in the
-[quick start guide](doc/installation/source/quick-start.rst).
-
-Before building ns-3, you must configure it.
-This step allows the configuration of the build options,
-such as whether to enable the examples, tests and more.
-
-To configure ns-3 with examples and tests enabled,
-run the following command on the ns-3 main directory:
-
-```shell
-./ns3 configure --enable-examples --enable-tests
+paper/
+├── cake-icns3.tex                          # ICNS3 paper source
+├── cake-icns3.pdf                          # (gitignored; rebuild as below)
+├── cake-slides.tex                         # presentation slides
+├── references.bib
+├── *.dat                                   # figure data (validation, CDFs,
+                                            # AQM latency-vs-rate)
+└── aqm-sweep.csv                           # raw AQM campaign output
 ```
 
-Then, build ns-3 by running the following command:
+## Build and run
 
-```shell
+The model only needs the `traffic-control`, `internet`, `point-to-point`,
+`applications` and `flow-monitor` modules. A reduced configure keeps the
+build fast:
+
+```sh
+./ns3 configure --enable-tests --enable-examples \
+    --enable-modules=traffic-control,internet,point-to-point,applications,flow-monitor
 ./ns3 build
 ```
 
-By default, the build artifacts will be stored in the `build/` directory.
+(`--enable-modules=...` is optional; the configuration above just keeps the
+compile small. A standard `./ns3 configure --enable-tests --enable-examples`
+also works.)
 
-### Supported Platforms
+Run the unit tests for CAKE:
 
-The current codebase is expected to build and run on the
-set of platforms listed in the [release notes](RELEASE_NOTES.md)
-file.
-
-Other platforms may or may not work: we welcome patches to
-improve the portability of the code to these other platforms.
-
-## Testing ns-3
-
-ns-3 contains test suites to validate the models and detect regressions.
-To run the test suite, run the following command on the ns-3 main directory:
-
-```shell
-./test.py
+```sh
+./test.py -s cake-queue-disc
 ```
 
-More information about ns-3 tests is available in the
-[test framework](doc/manual/source/test-framework.rst) section of the manual.
+All eight cases (single-flow FIFO, two-flow DRR, deficit shaper pacing,
+unlimited-mode bypass, DiffServ tin priority, ACK filtering, host fairness,
+per-tin rate caps) should pass in well under a second.
 
-## Running ns-3
+Run the bufferbloat-control demonstration:
 
-On recent Linux systems, once you have built ns-3 (with examples
-enabled), it should be easy to run the sample programs with the
-following command, such as:
-
-```shell
-./ns3 run simple-global-routing
+```sh
+./ns3 run "cake-bufferbloat-example --simTime=30"
 ```
 
-That program should generate a `simple-global-routing.tr` text
-trace file and a set of `simple-global-routing-xx-xx.pcap` binary
-PCAP trace files, which can be read by `tcpdump -n -tt -r filename.pcap`.
-The program source can be found in the `examples/routing` directory.
+Run the AQM comparison campaign that produces the paper's Figure 2:
 
-## Running ns-3 from Python
-
-If you do not plan to modify ns-3 upstream modules, you can get
-a pre-built version of the ns-3 python bindings. It is recommended
-to create a python virtual environment to isolate different application
-packages from system-wide packages (installable via the OS package managers).
-
-```shell
-python3 -m venv ns3env
-source ./ns3env/bin/activate
-pip install ns3
+```sh
+python3 src/traffic-control/examples/cake-aqm-campaign.py --quick
 ```
 
-If you do not have `pip`, check their documents
-on [how to install it](https://pip.pypa.io/en/stable/installation/).
+## Validation against Linux `sch_cake`
 
-After installing the `ns3` package, you can then create your simulation python script.
-Below is a trivial demo script to get you started.
+The `examples/` directory ships a reproducible validation harness:
 
-```python
-from ns import ns
+* `cake-linux-testbed.sh` — bring up a network-namespace testbed and run
+  Flent's *rrul* test against `tc qdisc … cake`. Linux only; requires
+  `flent`, `netperf`, `fping` and a kernel ≥ 4.19.
+* `cake-flent-extract.py` — turn the resulting `.flent.gz` into a reference
+  JSON.
+* `cake-validation-compare.py` — run the ns-3 rrul scenario for the
+  reference's parameters, print a per-metric relative-error table, and exit
+  non-zero on failure (suitable as a reproducibility gate).
 
-ns.LogComponentEnable("Simulator", ns.LOG_LEVEL_ALL)
+The seven committed `cake-validation-linux-*.json` files are the Linux
+references from the paper's validation table; two more (`asym-*-ackon/off`)
+are the asymmetric ACK-filtering references. Reproduce a comparison locally:
 
-ns.Simulator.Stop(ns.Seconds(10))
-ns.Simulator.Run()
-ns.Simulator.Destroy()
+```sh
+./ns3 build cake-rrul-validation
+python3 src/traffic-control/examples/cake-validation-compare.py \
+    --reference src/traffic-control/examples/cake-validation-linux-10mbit-40ms.json
 ```
 
-The simulation will take a while to start, while the bindings are loaded.
-The script above will print the logging messages for the called commands.
+Full step-by-step capture instructions are in the
+[`examples/README.md`](src/traffic-control/examples/README.md) and in
+[`src/traffic-control/doc/cake.rst`](src/traffic-control/doc/cake.rst).
 
-Use `help(ns)` to check the prototypes for all functions defined in the
-ns3 namespace. To get more useful results, query specific classes of
-interest and their functions e.g., `help(ns.Simulator)`.
+## Docs and Results
 
-Smart pointers `Ptr<>` can be differentiated from objects by checking if
-`__deref__` is listed in `dir(variable)`. To dereference the pointer,
-use `variable.__deref__()`.
+The paper is LaTeX (acmart, pgfplots). Build from `paper/`:
 
-Most ns-3 simulations are written in C++ and the documentation is
-oriented towards C++ users. The ns-3 tutorial programs (`first.cc`,
-`second.cc`, etc.) have Python equivalents, if you are looking for
-some initial guidance on how to use the Python API. The Python
-API may not be as full-featured as the C++ API, and an API guide
-for what C++ APIs are supported or not from Python do not currently exist.
-The project is looking for additional Python maintainers to improve
-the support for future Python users.
-
-## ns-3 Documentation
-
-Once you have verified that your build of ns-3 works by running
-the `simple-global-routing` example as outlined in the [running ns-3](#running-ns-3)
-section, it is quite likely that you will want to get started on reading
-some ns-3 documentation.
-
-All of that documentation should always be available from
-the ns-3 website: <https://www.nsnam.org/documentation/>.
-
-This documentation includes:
-
-* a tutorial
-* a reference manual
-* models in the ns-3 model library
-* a wiki for user-contributed tips: <https://www.nsnam.org/wiki/>
-* API documentation generated using doxygen: this is
-  a reference manual, most likely not very well suited
-  as introductory text:
-  <https://www.nsnam.org/doxygen/index.html>
-
-## Working with the Development Version of ns-3
-
-If you want to download and use the development version of ns-3, you
-need to use the tool `git`. A quick and dirty cheat sheet is included
-in the manual, but reading through the Git
-tutorials found in the Internet is usually a good idea if you are not
-familiar with it.
-
-If you have successfully installed Git, you can get
-a copy of the development version with the following command:
-
-```shell
-git clone https://gitlab.com/nsnam/ns-3-dev.git
+```sh
+cd paper
+pdflatex cake-icns3 && bibtex cake-icns3 && pdflatex cake-icns3 && pdflatex cake-icns3
+pdflatex cake-slides && pdflatex cake-slides
 ```
 
-However, we recommend to follow the GitLab guidelines for starters,
-that includes creating a GitLab account, forking the ns-3-dev project
-under the new account's name, and then cloning the forked repository.
-You can find more information in the [manual](https://www.nsnam.org/docs/manual/html/working-with-git.html).
+The figures pull their data directly from the checked-in `paper/*.dat`
+files, so the figures in the paper are guaranteed to match the figures in
+the slides.
 
-## Contributing to ns-3
+## Per-folder documentation
 
-The process of contributing to the ns-3 project varies with
-the people involved, the amount of time they can invest
-and the type of model they want to work on, but the current
-process that the project tries to follow is described in the
-[contributing code](https://www.nsnam.org/developers/contributing-code/)
-website and in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+For more detail on each part of the work see the folder-level READMEs:
 
-## Reporting Issues
+* [`src/traffic-control/model/README.md`](src/traffic-control/model/README.md)
+  — class hierarchy, mechanism walkthrough, attribute table.
+* [`src/traffic-control/test/README.md`](src/traffic-control/test/README.md)
+  — what each of the eight unit tests covers.
+* [`src/traffic-control/examples/README.md`](src/traffic-control/examples/README.md)
+  — every script and reference JSON described.
 
-If you would like to report an issue, you can open a new issue in the
-[GitLab issue tracker](https://gitlab.com/nsnam/ns-3-dev/-/issues).
-Before creating a new issue, please check if the problem that you are facing
-was already reported and contribute to the discussion, if necessary.
+## Authors
 
-## Asking Questions
+* **Haoyu Wang** — University of Massachusetts Boston —
+  haoyu.wang001@umb.edu
+* **Bo Sheng** — University of Massachusetts Boston — bo.sheng@umb.edu
+* **Xiaoqian Zhang** — University of Nebraska Omaha —
+  xiaoqianzhang@unomaha.edu
 
-ns-3 has an official [ns-3-users message board](https://groups.google.com/g/ns-3-users)
-where the community asks questions and share helpful advice.
-Additionally, ns-3 has the [ns-3 Zulip chat](https://ns-3.zulipchat.com/), used to discuss
-development issues and questions among maintainers and the community.
-
-Please use the above resources to ask questions about ns-3, rather than creating issues.
-
-## ns-3 App Store
-
-The official [ns-3 App Store](https://apps.nsnam.org/) is a centralized directory
-listing third-party modules for ns-3 available on the Internet.
-
-More information on how to submit an ns-3 module to the ns-3 App Store is available
-in the [ns-3 App Store documentation](https://www.nsnam.org/docs/contributing/html/external.html).
+Comments, bug reports, and merge-request feedback welcome.

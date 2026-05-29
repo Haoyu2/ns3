@@ -87,3 +87,35 @@ build_lib_example(
     ${libflow-monitor}
     ${libtraffic-control}
 )
+
+build_lib_example(
+  NAME cake-bufferbloat-example
+  SOURCE_FILES cake-bufferbloat-example.cc
+  LIBRARIES_TO_LINK
+    ${libpoint-to-point}
+    ${libinternet}
+    ${libapplications}
+    ${libflow-monitor}
+    ${libtraffic-control}
+)
+
+build_lib_example(
+  NAME cake-aqm-comparison
+  SOURCE_FILES cake-aqm-comparison.cc
+  LIBRARIES_TO_LINK
+    ${libpoint-to-point}
+    ${libinternet}
+    ${libapplications}
+    ${libflow-monitor}
+    ${libtraffic-control}
+)
+
+build_lib_example(
+  NAME cake-rrul-validation
+  SOURCE_FILES cake-rrul-validation.cc
+  LIBRARIES_TO_LINK
+    ${libpoint-to-point}
+    ${libinternet}
+    ${libapplications}
+    ${libtraffic-control}
+)

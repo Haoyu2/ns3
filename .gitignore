@@ -50,3 +50,6 @@ vcpkg/
 
 # Ignore local cache used by e.g. clangd
 .cache/
+
+# Stale top-level campaign output (paper/aqm-sweep.csv is the kept copy).
+cake-aqm-results.csv
