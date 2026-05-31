@@ -125,8 +125,9 @@ def main() -> int:
     args = parser.parse_args()
 
     repo = repo_root_from_script()
-    summary = args.summary or repo / "paper" / "icns3-2026-tcp-aqm" / "results" / "summary-aggregate.csv"
-    figures_dir = args.figures_dir or repo / "paper" / "icns3-2026-tcp-aqm" / "figures"
+    results_root = repo / "contrib" / "tcp-aqm-config" / "results"
+    summary = args.summary or results_root / "single-flow" / "summary-aggregate.csv"
+    figures_dir = args.figures_dir or results_root / "figures" / "inspection"
     figures_dir.mkdir(parents=True, exist_ok=True)
 
     rows = read_rows(summary)

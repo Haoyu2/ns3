@@ -46,9 +46,9 @@ Current extension status:
 - The runner pins each run with per-file SHA-256 hashes of the benchmark and contrib module sources, plus a snapshot of ns-3-relevant environment variables (`NS_LOG`, `NS_GLOBAL_VALUE`, `LD_LIBRARY_PATH`, etc.). A warning is printed when the pinned sources are dirty in git so reviewers can tell the recorded commit apart from the actual running code.
 - `examples/tcp/tcp-validation.cc` remains unchanged.
 
-See `scenario-extension-plan.md` for the scoped path from the validated baseline to optional BBR and competing-flow experiments.
+All test artifacts (per-campaign summary CSVs, derived evaluation tables, and SVG figures) live under [`../../contrib/tcp-aqm-config/results/`](../../contrib/tcp-aqm-config/results/). See that directory's `README.md` for the full layout and end-to-end regeneration commands.
 
-The active Overleaf/GitHub paper repo is `../icns3-2026-summer/`. Make new LaTeX paper edits there. The local `tex/` directory is now a backup/staging copy.
+The active Overleaf/GitHub paper repo is `../icns3-2026-summer/`. Make new LaTeX paper edits there.
 
 ## Research Questions
 
@@ -71,10 +71,16 @@ RQ4. What metadata and artifact structure is needed to make a TCP/AQM ns-3 study
 
 ## Reproduce Current Results
 
+The analyzer and plotter scripts default to the contrib results tree, so most
+campaign reruns only need a single command. Pass `--runner direct` if `./ns3
+run` runs into local rebuild/ccache issues; on a normal ns-3 setup the
+default runner works.
+
 Single-flow campaign used for the main paper table:
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py --mode single-flow --runs 3 --stop-time 40s --overwrite --runner direct
+python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+  --mode single-flow --runs 3 --stop-time 40s --overwrite
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py --warmup 10
 python3 paper/icns3-2026-tcp-aqm/scripts/plot_summary_svg.py
 ```
@@ -83,20 +89,14 @@ Replicated mixed-flow campaign:
 
 ```bash
 python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
-  --mode mixed-flow \
-  --topologies single-bottleneck \
+  --mode mixed-flow --topologies single-bottleneck \
   --pairs cubic:reno,cubic:dctcp,reno:dctcp \
-  --queue-types codel,fq \
-  --base-rtts 10ms,80ms \
-  --ecns 1 \
-  --runs 3 \
-  --stop-time 40s \
-  --results-dir paper/icns3-2026-tcp-aqm/results-mixed \
-  --overwrite \
-  --runner direct
+  --queue-types codel,fq --base-rtts 10ms,80ms --ecns 1 \
+  --runs 3 --stop-time 40s --overwrite \
+  --results-dir contrib/tcp-aqm-config/results/mixed-flow
 
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
-  --results-dir paper/icns3-2026-tcp-aqm/results-mixed \
+  --results-dir contrib/tcp-aqm-config/results/mixed-flow \
   --warmup 20
 ```
 
@@ -107,17 +107,16 @@ python3 paper/icns3-2026-tcp-aqm/scripts/analyze_core_evaluation.py
 python3 paper/icns3-2026-tcp-aqm/scripts/plot_core_evaluation_svg.py
 ```
 
-Config-authored one-parameter sweep:
+Config-authored one-parameter sweep (writes into the smoke results dir):
 
 ```bash
 python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
   --config-file contrib/tcp-aqm-config/configs/single-bottleneck.json \
-  --results-dir paper/icns3-2026-tcp-aqm/results-config-sweep \
-  --runner direct \
+  --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep \
   --overwrite
 
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
-  --results-dir paper/icns3-2026-tcp-aqm/results-config-sweep \
+  --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep \
   --warmup 10
 ```
 
@@ -128,17 +127,16 @@ Config-module validation:
 ./ns3 run "tcp-aqm-config-validate --configFile=contrib/tcp-aqm-config/configs/two-bottleneck.json"
 ```
 
-Use `--runner direct` when the already-built benchmark binary should be invoked directly. This avoids local rebuild/ccache issues in this workspace. On a normal ns-3 setup, the default `./ns3 run` runner should also work.
-
 ## Result Artifacts
 
-- Single-flow summaries: `results/summary.csv`, `results/summary-aggregate.csv`
-- Mixed-flow summaries: `results-mixed/summary.csv`, `results-mixed/summary-aggregate.csv`
-- Config sweep summaries: `results-config-sweep*/summary*.csv`
-- Topology smoke summaries: `results-topology-smoke/summary.csv`, `results-topology-smoke/summary-aggregate.csv`
-- Mixed-flow smoke summaries: `results-mixed-smoke/summary.csv`, `results-mixed-smoke/summary-aggregate.csv`
-- Inspection figures: `figures/throughput-full.svg`, `figures/queue-delay-full.svg`
-- Core evaluation derived tables: `evaluation/*.csv`
-- Core evaluation figures: `figures/core-eval/*.svg`
+All test artifacts now live under [`../../contrib/tcp-aqm-config/results/`](../../contrib/tcp-aqm-config/results/):
 
-Raw per-run directories are intentionally ignored by git; the summary CSVs and paper-facing artifacts are preserved.
+- `single-flow/summary.csv`, `single-flow/summary-aggregate.csv`
+- `mixed-flow/summary.csv`, `mixed-flow/summary-aggregate.csv`
+- `smoke/{config-sweep,mixed-flow,topology}/summary*.csv`
+- `evaluation/*.csv` — derived ECN / RTT / fairness / Pareto / warmup / stability tables
+- `figures/*.svg` — paper-facing core evaluation figures
+- `figures/inspection/*.svg` — quick-look summary plots
+
+Raw per-run directories are intentionally git-ignored; the summary CSVs, derived
+tables, and reference figures are preserved.

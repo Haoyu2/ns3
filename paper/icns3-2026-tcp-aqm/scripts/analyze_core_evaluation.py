@@ -459,12 +459,12 @@ def main() -> int:
     args = parser.parse_args()
 
     repo = repo_root_from_script()
-    root = repo / "paper" / "icns3-2026-tcp-aqm"
-    single_aggregate = args.single_aggregate or root / "results" / "summary-aggregate.csv"
-    mixed_aggregate = args.mixed_aggregate or root / "results-mixed" / "summary-aggregate.csv"
-    single_results_dir = args.single_results_dir or root / "results"
-    mixed_results_dir = args.mixed_results_dir or root / "results-mixed"
-    output_dir = args.output_dir or root / "evaluation"
+    results_root = repo / "contrib" / "tcp-aqm-config" / "results"
+    single_aggregate = args.single_aggregate or results_root / "single-flow" / "summary-aggregate.csv"
+    mixed_aggregate = args.mixed_aggregate or results_root / "mixed-flow" / "summary-aggregate.csv"
+    single_results_dir = args.single_results_dir or results_root / "single-flow"
+    mixed_results_dir = args.mixed_results_dir or results_root / "mixed-flow"
+    output_dir = args.output_dir or results_root / "evaluation"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     single_rows = read_rows(single_aggregate)

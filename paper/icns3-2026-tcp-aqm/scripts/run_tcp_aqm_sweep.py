@@ -859,7 +859,9 @@ def main() -> int:
     args = parser.parse_args()
 
     repo = repo_root_from_script()
-    results_dir = args.results_dir or repo / "paper" / "icns3-2026-tcp-aqm" / "results"
+    results_dir = args.results_dir or (
+        repo / "contrib" / "tcp-aqm-config" / "results" / "single-flow"
+    )
     results_dir.mkdir(parents=True, exist_ok=True)
     warn_if_dirty_sources(repo)
 

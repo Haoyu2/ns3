@@ -13,9 +13,9 @@ the original ns-3 project README.
 
 | Path | What it is |
 | --- | --- |
-| [`contrib/tcp-aqm-config/`](contrib/tcp-aqm-config/) | New ns-3 contrib module: typed C++ experiment / topology configuration objects (YAML + JSON), a `tcp-aqm-benchmark` example derived from the in-tree `examples/tcp/tcp-validation.cc`, and a `tcp-aqm-config-validate` config-checker. |
+| [`contrib/tcp-aqm-config/`](contrib/tcp-aqm-config/) | New ns-3 contrib module: typed C++ experiment / topology configuration objects (YAML + JSON), a `tcp-aqm-benchmark` example derived from the in-tree `examples/tcp/tcp-validation.cc`, a `tcp-aqm-config-validate` config-checker, and the canonical [`results/`](contrib/tcp-aqm-config/results/) folder with all committed test data. |
 | [`paper/icns3-2026-summer/`](paper/icns3-2026-summer/) | ICNS3 2026 paper sources (LaTeX, figures, references, rendered `main.pdf`). Originally an Overleaf-synced repo; the inner `.git` is preserved at `paper/icns3-2026-summer/.git-uno-overleaf-backup/` (gitignored) so the Overleaf workflow can be restored by renaming that directory back to `.git`. |
-| [`paper/icns3-2026-tcp-aqm/`](paper/icns3-2026-tcp-aqm/) | Paper artifact workspace: the Python harness, derived evaluation tables and figures, drafted-prose markdown, and per-campaign summary CSVs. |
+| [`paper/icns3-2026-tcp-aqm/`](paper/icns3-2026-tcp-aqm/) | Paper-workspace tooling and prose: the Python harness (runner / analyzers / plotters), the drafted-prose markdown that fed the LaTeX paper, and the working bibliography. Test outputs themselves live in `contrib/tcp-aqm-config/results/`. |
 | [`README-ns3.md`](README-ns3.md) | The original upstream ns-3 README, renamed so the new top-level README is the guided tour. |
 
 `examples/tcp/tcp-validation.cc` is **unchanged** — the benchmark inherits its
@@ -45,9 +45,9 @@ Run a small single-flow smoke campaign and analyze it:
 ```bash
 python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
   --mode smoke --runs 1 --stop-time 10s --runner ns3 --overwrite \
-  --results-dir paper/icns3-2026-tcp-aqm/results-smoke
+  --results-dir contrib/tcp-aqm-config/results/smoke/single-flow
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
-  --results-dir paper/icns3-2026-tcp-aqm/results-smoke --warmup 5
+  --results-dir contrib/tcp-aqm-config/results/smoke/single-flow --warmup 5
 ```
 
 The dependencies for the contrib module (`yaml-cpp`, `fmt`) install with:
@@ -78,23 +78,21 @@ cd paper/icns3-2026-summer && ./scripts/compile-pdf.sh --figures
 | [`examples/tcp-aqm-benchmark.cc`](contrib/tcp-aqm-config/examples/tcp-aqm-benchmark.cc) | Paper-specific benchmark scenario derived from `examples/tcp/tcp-validation.cc`. Accepts both short aliases (`cubic`, `dctcp`) and full TypeIds (`ns3::TcpBbr`). Supports `--configFile=...` for YAML/JSON-driven runs, including `firstStartJitter` for stochastic single-flow campaigns. |
 | [`examples/tcp-aqm-config-validate.cc`](contrib/tcp-aqm-config/examples/tcp-aqm-config-validate.cc) | Loads a config file and prints the normalized form. Useful for catching mistakes before launching a campaign. |
 | [`configs/`](contrib/tcp-aqm-config/configs/) | YAML and JSON examples for the single-bottleneck and two-bottleneck templates, each including a one-parameter sweep block. |
+| [`results/`](contrib/tcp-aqm-config/results/) | Canonical home for committed test data: per-campaign summary CSVs (`single-flow/`, `mixed-flow/`, `smoke/{config-sweep,mixed-flow,topology}/`), derived `evaluation/*.csv` tables, and `figures/*.svg`. See [`results/README.md`](contrib/tcp-aqm-config/results/README.md) for layout and end-to-end regeneration. |
 | [`scripts/install-deps-{macos,ubuntu}.sh`](contrib/tcp-aqm-config/scripts/) | Installs `yaml-cpp` and `fmt`. |
 | [`CMakeLists.txt`](contrib/tcp-aqm-config/CMakeLists.txt) | Builds the contrib library and both example executables. |
 
-### `paper/icns3-2026-tcp-aqm/` — artifact workspace
+### `paper/icns3-2026-tcp-aqm/` — paper workspace (tooling + prose)
 
 | File / dir | Purpose |
 | --- | --- |
-| [`scripts/run_tcp_aqm_sweep.py`](paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py) | Expands a campaign matrix or a config-file sweep, runs `tcp-aqm-benchmark` once per configuration, and writes per-run `metadata.json` (parameters, ns-3 commit, per-file SHA-256, env snapshot, command line, wall-clock, return code), `command.txt`, `stdout.txt`/`stderr.txt`, and raw trace files. Warns when the benchmark or contrib sources are dirty in git. |
+| [`scripts/run_tcp_aqm_sweep.py`](paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py) | Expands a campaign matrix or a config-file sweep, runs `tcp-aqm-benchmark` once per configuration, and writes per-run `metadata.json` (parameters, ns-3 commit, per-file SHA-256, env snapshot, command line, wall-clock, return code), `command.txt`, `stdout.txt`/`stderr.txt`, and raw trace files. Default `--results-dir` is `contrib/tcp-aqm-config/results/single-flow`. Warns when the benchmark or contrib sources are dirty in git. |
 | [`scripts/analyze_tcp_aqm.py`](paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py) | Reads run directories and emits per-run + aggregate `summary.csv`/`summary-aggregate.csv`. Computes throughput, ping RTT, queueing delay, congestion window, drops, marks, Jain fairness (two-flow), and clamps the warmup threshold to the flow start time. |
-| [`scripts/analyze_core_evaluation.py`](paper/icns3-2026-tcp-aqm/scripts/analyze_core_evaluation.py) | Derives the eight core evaluation tables used by the paper: ECN impact, RTT throughput dispersion, ranking stability, throughput/delay Pareto frontier, mixed-flow share, FQ-CoDel vs. CoDel fairness, warmup sensitivity, and late-window stability. |
-| [`scripts/plot_core_evaluation_svg.py`](paper/icns3-2026-tcp-aqm/scripts/plot_core_evaluation_svg.py) | Renders the paper-facing SVG figures (no third-party plotting dependency). Unified style: colourblind-safe palette, consistent margins, grouped per-campaign bar charts for the audit figures. |
-| [`scripts/plot_summary_svg.py`](paper/icns3-2026-tcp-aqm/scripts/plot_summary_svg.py) | Quick-look inspection SVGs straight from `summary-aggregate.csv`. |
-| [`evaluation/*.csv`](paper/icns3-2026-tcp-aqm/evaluation/) | Output of `analyze_core_evaluation.py`. Identical copies live under `paper/icns3-2026-summer/data/core-eval/` for the paper build. |
-| [`figures/core-eval/*.svg`](paper/icns3-2026-tcp-aqm/figures/core-eval/) | SVG outputs of `plot_core_evaluation_svg.py`. PDF copies for LaTeX live under `paper/icns3-2026-summer/fig/tcp-aqm/core-eval/`. |
-| [`results/`](paper/icns3-2026-tcp-aqm/results/), [`results-mixed/`](paper/icns3-2026-tcp-aqm/results-mixed/), [`results-*-smoke/`](paper/icns3-2026-tcp-aqm/) | Per-campaign summary CSVs only. Raw per-run trace directories are intentionally gitignored (≈1 GB) and can be regenerated with the runner. |
-| [`README.md`](paper/icns3-2026-tcp-aqm/README.md), [`ARTIFACT.md`](paper/icns3-2026-tcp-aqm/ARTIFACT.md) | Detailed workspace docs: research questions, reproduction commands, artifact manifest, and known limitations. |
-| [`abstract.md`](paper/icns3-2026-tcp-aqm/abstract.md), [`draft.md`](paper/icns3-2026-tcp-aqm/draft.md), [`outline.md`](paper/icns3-2026-tcp-aqm/outline.md), [`related-work.md`](paper/icns3-2026-tcp-aqm/related-work.md), [`scenario-extension-plan.md`](paper/icns3-2026-tcp-aqm/scenario-extension-plan.md), [`references.bib`](paper/icns3-2026-tcp-aqm/references.bib) | Prose drafting and planning notes that fed the LaTeX paper. |
+| [`scripts/analyze_core_evaluation.py`](paper/icns3-2026-tcp-aqm/scripts/analyze_core_evaluation.py) | Derives the eight core evaluation tables used by the paper: ECN impact, RTT throughput dispersion, ranking stability, throughput/delay Pareto frontier, mixed-flow share, FQ-CoDel vs. CoDel fairness, warmup sensitivity, and late-window stability. Writes to `contrib/tcp-aqm-config/results/evaluation/`. |
+| [`scripts/plot_core_evaluation_svg.py`](paper/icns3-2026-tcp-aqm/scripts/plot_core_evaluation_svg.py) | Renders the paper-facing SVG figures (no third-party plotting dependency). Unified style: colourblind-safe palette, consistent margins, grouped per-campaign bar charts for the audit figures. Writes to `contrib/tcp-aqm-config/results/figures/`. |
+| [`scripts/plot_summary_svg.py`](paper/icns3-2026-tcp-aqm/scripts/plot_summary_svg.py) | Quick-look inspection SVGs from `summary-aggregate.csv`. Writes to `contrib/tcp-aqm-config/results/figures/inspection/`. |
+| [`README.md`](paper/icns3-2026-tcp-aqm/README.md), [`ARTIFACT.md`](paper/icns3-2026-tcp-aqm/ARTIFACT.md) | Workspace docs: research questions, reproduction commands, artifact manifest, and known limitations. |
+| [`abstract.md`](paper/icns3-2026-tcp-aqm/abstract.md), [`draft.md`](paper/icns3-2026-tcp-aqm/draft.md), [`outline.md`](paper/icns3-2026-tcp-aqm/outline.md), [`related-work.md`](paper/icns3-2026-tcp-aqm/related-work.md), [`references.bib`](paper/icns3-2026-tcp-aqm/references.bib) | Prose drafting notes that fed the LaTeX paper. |
 
 ### `paper/icns3-2026-summer/` — LaTeX paper sources
 

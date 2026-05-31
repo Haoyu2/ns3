@@ -752,10 +752,10 @@ def main() -> int:
     args = parser.parse_args()
 
     repo = repo_root_from_script()
-    root = repo / "paper" / "icns3-2026-tcp-aqm"
-    evaluation_dir = args.evaluation_dir or root / "evaluation"
-    single_aggregate = args.single_aggregate or root / "results" / "summary-aggregate.csv"
-    figures_dir = args.figures_dir or root / "figures" / "core-eval"
+    results_root = repo / "contrib" / "tcp-aqm-config" / "results"
+    evaluation_dir = args.evaluation_dir or results_root / "evaluation"
+    single_aggregate = args.single_aggregate or results_root / "single-flow" / "summary-aggregate.csv"
+    figures_dir = args.figures_dir or results_root / "figures"
     figures_dir.mkdir(parents=True, exist_ok=True)
 
     # ECN — queue-delay delta

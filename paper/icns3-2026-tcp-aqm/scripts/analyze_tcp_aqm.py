@@ -352,7 +352,9 @@ def main() -> int:
     args = parser.parse_args()
 
     repo = repo_root_from_script()
-    results_dir = args.results_dir or repo / "paper" / "icns3-2026-tcp-aqm" / "results"
+    results_dir = args.results_dir or (
+        repo / "contrib" / "tcp-aqm-config" / "results" / "single-flow"
+    )
     output = args.output or results_dir / "summary.csv"
     aggregate_output = args.aggregate_output or results_dir / "summary-aggregate.csv"
     selected_output = args.selected_output or results_dir / "summary-selected.csv"

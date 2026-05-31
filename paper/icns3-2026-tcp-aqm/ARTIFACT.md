@@ -19,6 +19,9 @@ paper. The Overleaf-ready paper source is maintained separately in
   - Provides YAML and JSON examples for single-bottleneck and two-bottleneck
     templates.
   - Includes `tcp-aqm-config-validate`.
+  - `contrib/tcp-aqm-config/results/` is the canonical home of all committed
+    test data (per-campaign summary CSVs, derived evaluation tables, and
+    reference figures). See its `README.md` for layout and regeneration.
 
 - `paper/icns3-2026-tcp-aqm/scripts/`
   - `run_tcp_aqm_sweep.py`: expands campaign matrices, runs ns-3, stores
@@ -34,18 +37,21 @@ paper. The Overleaf-ready paper source is maintained separately in
 ## Preserved Results
 
 The artifact preserves summary CSVs in git and ignores raw per-run directories.
-Raw traces can be regenerated from the commands below.
+All summary paths are relative to `contrib/tcp-aqm-config/results/`. Raw
+traces can be regenerated from the commands below.
 
 | Campaign | Per-run rows | Aggregate rows | Summary path |
 | --- | ---: | ---: | --- |
-| Single-flow full campaign | 180 | 60 | `results/summary-aggregate.csv` |
-| Topology smoke | 2 | 2 | `results-topology-smoke/summary-aggregate.csv` |
-| Mixed-flow smoke | 2 | 2 | `results-mixed-smoke/summary-aggregate.csv` |
-| Mixed-flow replicated campaign | 36 | 12 | `results-mixed/summary-aggregate.csv` |
-| Config-authored RTT sweep smoke | 3 | 3 | `results-config-sweep-smoke/summary-selected-aggregate.csv` |
+| Single-flow full campaign | 180 | 60 | `single-flow/summary-aggregate.csv` |
+| Topology smoke | 2 | 2 | `smoke/topology/summary-aggregate.csv` |
+| Mixed-flow smoke | 2 | 2 | `smoke/mixed-flow/summary-aggregate.csv` |
+| Mixed-flow replicated campaign | 36 | 12 | `mixed-flow/summary-aggregate.csv` |
+| Config-authored RTT sweep smoke | 3 | 3 | `smoke/config-sweep/summary-selected-aggregate.csv` |
 
-Additional derived evaluation artifacts are stored in `evaluation/*.csv`.
-Paper-facing core figures are stored in `figures/core-eval/*.svg`.
+Additional derived evaluation artifacts are stored in
+`contrib/tcp-aqm-config/results/evaluation/*.csv`.
+Paper-facing core figures are stored in
+`contrib/tcp-aqm-config/results/figures/*.svg`.
 
 ## Reproduction Commands
 
@@ -68,32 +74,23 @@ Run and analyze the replicated mixed-flow campaign:
 
 ```bash
 python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
-  --mode mixed-flow \
-  --topologies single-bottleneck \
+  --mode mixed-flow --topologies single-bottleneck \
   --pairs cubic:reno,cubic:dctcp,reno:dctcp \
-  --queue-types codel,fq \
-  --base-rtts 10ms,80ms \
-  --ecns 1 \
-  --runs 3 \
-  --stop-time 40s \
-  --results-dir paper/icns3-2026-tcp-aqm/results-mixed \
-  --overwrite \
-  --runner direct
+  --queue-types codel,fq --base-rtts 10ms,80ms --ecns 1 \
+  --runs 3 --stop-time 40s --overwrite \
+  --results-dir contrib/tcp-aqm-config/results/mixed-flow
 
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
-  --results-dir paper/icns3-2026-tcp-aqm/results-mixed \
+  --results-dir contrib/tcp-aqm-config/results/mixed-flow \
   --warmup 20
 ```
 
-Run and analyze the single-flow campaign:
+Run and analyze the single-flow campaign (default `--results-dir` is
+`contrib/tcp-aqm-config/results/single-flow`):
 
 ```bash
 python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
-  --mode single-flow \
-  --runs 3 \
-  --stop-time 40s \
-  --overwrite \
-  --runner direct
+  --mode single-flow --runs 3 --stop-time 40s --overwrite
 
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py --warmup 10
 python3 paper/icns3-2026-tcp-aqm/scripts/plot_summary_svg.py
@@ -104,12 +101,11 @@ Run and analyze a config-authored one-parameter sweep:
 ```bash
 python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
   --config-file contrib/tcp-aqm-config/configs/single-bottleneck.json \
-  --results-dir paper/icns3-2026-tcp-aqm/results-config-sweep \
-  --overwrite \
-  --runner direct
+  --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep \
+  --overwrite
 
 python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
-  --results-dir paper/icns3-2026-tcp-aqm/results-config-sweep \
+  --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep \
   --warmup 10
 ```
 

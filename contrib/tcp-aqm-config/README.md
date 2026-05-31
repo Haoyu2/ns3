@@ -5,6 +5,16 @@ benchmark artifact. It reads YAML or JSON files through `yaml-cpp`, uses `fmt`
 for normalized configuration output, validates the experiment/topology sections,
 and exposes typed configuration objects to ns-3 examples.
 
+## Directory layout
+
+| Path | What it contains |
+| --- | --- |
+| [`configs/`](configs/) | YAML / JSON example configurations: single-bottleneck and two-bottleneck templates, each with a `sweep:` block. |
+| [`model/`](model/) | C++ configuration classes (`TcpAqmExperimentConfig`, `TcpAqmTopologyConfig`, sweep + analysis enums). |
+| [`examples/`](examples/) | `tcp-aqm-benchmark` (derived from `examples/tcp/tcp-validation.cc`) and the `tcp-aqm-config-validate` config-checker. |
+| [`scripts/`](scripts/) | Dependency installers for macOS and Ubuntu. |
+| [`results/`](results/) | Committed test artifacts: per-campaign summary CSVs, derived evaluation tables, and reference figures. See [`results/README.md`](results/README.md) for layout and regeneration commands. Raw per-run trace directories are gitignored. |
+
 The public API uses ns-3 value types for scalar fields and enums for controlled
 choices:
 
