@@ -1,0 +1,231 @@
+\documentclass[conference]{IEEEtran}
+
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+%\usepackage{algorithm}
+\usepackage{subfigure}
+%\usepackage{subfig}
+%\usepackage{subcaption}
+\usepackage{comment}
+\usepackage{framed}
+\usepackage{enumitem}
+\usepackage{ragged2e}
+\usepackage{tikz}
+\usepackage{booktabs,tabularx}
+% line space issue
+%\usepackage[singlespacing]{setspace} 
+%\setstretch{1.01352} 
+\usepackage[singlespacing]{setspace} \setstretch{1.0041841} % 12 pt/11.95pt
+
+\pdfminorversion=4 
+
+%\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+%    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    
+    
+\graphicspath{{fig/}{images/}}
+	\DeclareGraphicsExtensions{.eps,.pdf,.jpeg,.png}
+	
+% \newcommand{\our}{\textsc{DIRS}}
+\newcommand{\our}{\textsc{DCTCP-FQ}}
+
+\begin{document}
+
+\title{ NAK-Broadcast Assisted Collision Resolution in IEEE 802.11 DCF Using Variable Packet Lengths
+}
+
+\author{\IEEEauthorblockN{
+Haoyu Wang\IEEEauthorrefmark{1},
+Xiaoqian Zhang\IEEEauthorrefmark{2}, 
+Allen Yang\IEEEauthorrefmark{1},
+Bo Sheng\IEEEauthorrefmark{1}
+%Ningfang Mi\IEEEauthorrefmark{1}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Electrical and Computer Engineering, Northeastern University, Boston, USA
+%\\Email: jia.da@husky.neu.edu, bhimani@ece.neu.edu, ningfang@ece.neu.edu 
+%}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}Department of Computer Science, University of Massachusetts Boston, Boston, USA
+%\\Email: sonnam.nguyen001@umb.edu, shengbo@cs.umb.edu 
+}
+\IEEEauthorblockA{\IEEEauthorrefmark{2}Department of Computer Science, University of Nebraska Omaha, Omaha, USA
+}
+%\IEEEauthorblockA{\IEEEauthorrefmark{3}Samsung Semiconductor Inc., San Jose, CA, USA
+}
+}
+
+%  \author[1]{Danlin Jia}
+%  \author[2]{Tengpeng Li}
+%  \author[2]{Xiaoqian Zhang}
+%  \author[1]{Li Wnag}
+%  \author[2]{Bo Sheng}
+%  \author[1]{Ningfang Mi}
+%  \affil[1]{Department of Electrical and Computer Engineering, Northeastern University}
+%  \affil[2]{Department of Computer Science, University of Massachusetts Boston}
+
+%  \renewcommand\Authands{ and }
+ 
+% \author{\IEEEauthorblockN{1\textsuperscript{st} Danlin Jia}
+% \IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
+% \textit{Northeastern University}\\
+% Boston, USA \\
+% jia.da@husky.neu.edu}
+% \and
+% \IEEEauthorblockN{2\textsuperscript{nd} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address}
+% \and
+% \IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address}
+% \and
+% \IEEEauthorblockN{4\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address}
+% \and
+% \IEEEauthorblockN{5\textsuperscript{th} Given Name Surname}
+% \IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+% \textit{name of organization (of Aff.)}\\
+% City, Country \\
+% email address}
+% }
+
+
+% \author{\IEEEauthorblockN{1\textsuperscript{st} Danlin Jia}
+% \IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
+% \textit{Northeastern University}\\
+% Boston, USA \\
+% jia.da@husky.neu.edu }
+% \and
+
+% \IEEEauthorblockN{2\textsuperscript{nd} Janki Bhimani}
+% \IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
+% \textit{Northeastern University}\\
+% Boston, USA \\
+% bhimani@ece.neu.edu}
+% \and
+
+% \IEEEauthorblockN{3\textsuperscript{rd} Son Nam Nguyen}
+% \IEEEauthorblockA{\textit{Department of Computer Science} \\
+% \textit{University of Massachusetts Boston}\\
+% Boston, USA \\
+% SonNam.Nguyen001@umb.edu}
+% \and
+
+% \IEEEauthorblockN{4\textsuperscript{th} Bo Sheng}
+% \IEEEauthorblockA{\textit{Department of Computer Science} \\
+% \textit{University of Massachusetts Boston}\\
+% Boston, USA \\
+% shengbo@cs.umb.edu}
+% \and
+% \IEEEauthorblockN{5\textsuperscript{th} Ningfang Mi}
+% \IEEEauthorblockA{\textit{Department of Electrical and Computer Engineering} \\
+% \textit{Northeastern University}\\
+% Boston, USA \\
+% ningfang@ece.neu.edu}
+
+% }
+
+% make the title area
+\maketitle
+
+\input{00_abstract.tex}
+
+%\vspace{-1mm}
+\input{01_intro.tex}
+
+%\vspace{-1mm}
+\input{02_motivation.tex}
+
+%\vspace{-1mm}
+\input{03_approach.tex}
+
+%\vspace{-1mm}
+\input{04_evaluation.tex}
+
+%\vspace{-1mm}
+\input{05_relatedWork.tex}
+
+%\vspace{-1mm}
+
+\input{06_conclusion.tex}
+
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtranS}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+% \begin{thebibliography}{1}
+
+% \bibitem{IEEEhowto:kopka}
+% H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%   0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+% \end{thebibliography}
+
+\RaggedRight
+\bibliographystyle{IEEEtran}
+% include bibliography definition
+\bibliography{IEEEcustom,bo, liwang,xiaoqian}
+
+% \begin{thebibliography}{00}
+%\bibitem{Delay scheduling} M. Zaharia et al. Delay scheduling: A simple technique for achieving locality and fairness in cluster scheduling. In EuroSys 2010
+%\bibitem{Fujitsu VDI Download link} “Fujitsu VDI,” [Online]. Available: http://iotta.snia.org/tracetypes/3
+%\bibitem{Fujitsu K5cloud Download link} "Fujitsu K5cloud," [Online]. Available: https://www.fujitsu.com/kz/Images
+%\bibitem{Tencent CBS Download link} “Tencent Cloud Block Storage (TCB),” [Online]. Available: https://intl.cloud.tencent.com/product/cbs
+%\bibitem{MATLAB} “MATLAB,” [Online]. Available: https://www.mathworks.com
+%\bibitem{Williams and Mary} “Q-MAP,” [Online]. Available: https://www.wm.edu/as/computerscience/
+%\bibitem{BMAP-Trace} “BMAP” [Online]. Available: https://
+%\bibitem{acs Verification} “./acs verification ,” [Online]. Available: https://
+
+
+%\bibitem{PCN} Cheng W, Qian K, Jiang W, Zhang T, Ren F. Re-architecting congestion management in lossless Ethernet.NSDI 2020
+%\bibitem{TCP} Padhye J, Firoiu V, Towsley D, Kurose J. Modeling TCP throughput: A simple model and its empirical validation.SIGCOMM 1998.
+%\bibitem{PFC} 802.1Qbb – Priority-based Flow Control.https://1.ieee802.org/dcb/802-1qbb/
+%\bibitem{QCN} 802.1Qau – Congestion Notification. https://1.ieee802.org/dcb/802-1qau/
+%\bibitem{ECN} Floyd S. TCP and explicit congestion notification.SIGCOMM 1994
+%\bibitem{DCTCP} Alizadeh, Mohammad, et al. Data center tcp (dctcp). SIGCOMM 2010
+%\bibitem{DCQCN} Zhu, Yibo, et al. Congestion control for large-scale RDMA deployments.SIGCOMM 2015.
+%\bibitem{TIMELY} Mittal, Radhika, et al. TIMELY: RTT-based congestion control for the datacenter. SIGCOMM 2015.
+%\bibitem{PFABRIC} Alizadeh, Mohammad, et al. pfabric: Minimal near-optimal datacenter transport.SIGCOMM 2013.
+%\bibitem{FASTPASS} Perry, Jonathan, et al. Fastpass: A centralized" zero-queue" datacenter network. SIGCOMM 2014
+%\bibtem{PHOST} Gao, Peter X., et al. phost: Distributed near-optimal datacenter transport over commodity network fabric. CoNEXT 2015
+%\bibtem{NDP} Handley, Mark, et al. Re-architecting datacenter networks and stacks for low latency and high performance. SIGCOMM 2017
+%\bibtem{HOMA} Montazeri, Behnam, et al. Homa: A receiver-driven low-latency transport protocol using network priorities. SIGCOMM 2018
+% \end{thebibliography}
+
+% that's all folks
+\end{document}
+
+

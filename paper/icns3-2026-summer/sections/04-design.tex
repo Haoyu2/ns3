@@ -1,0 +1,22 @@
+\section{Benchmark Design}
+
+The benchmark uses the dumbbell topology from \TcpValidation{} as its validation anchor, with the paper-specific scenario implemented as \TcpAqmBenchmark{}. Servers connect through a WAN router to one or more bottleneck links, then through a LAN router to clients. TCP data flows traverse the bottleneck path in the downstream direction, and a ping flow measures RTT. The bottleneck queue discipline is selected at runtime.
+
+The current implementation keeps benchmark configuration and the runnable scenario together inside a small contrib module, \TcpAqmModule{}. The module provides C++ experiment and topology configuration objects and reads YAML or JSON files using \texttt{yaml-cpp}. This lets the same benchmark binary run from either command-line arguments or versioned configuration files. The first topology templates are intentionally constrained: a single bottleneck and two serial bottlenecks. This keeps the artifact reviewable while showing how topology structure can be externalized without editing the scenario source.
+
+The primary experiment matrix in this paper varies three of the seventeen TCP TypeIds the module accepts:
+
+\begin{itemize}
+  \item TCP variant: Linux Reno, CUBIC, DCTCP (selected from the seventeen TCP TypeIds the module accepts, including BBR, NewReno, Vegas, Veno, YeAH, BIC, Westwood+, Illinois, HighSpeed, Hybla, H-TCP, Scalable, LEDBAT, and LP).
+  \item Queue discipline: CoDel, FQ-CoDel, PIE, RED.
+  \item Base RTT: 10 ms, 50 ms, 80 ms.
+  \item ECN: disabled or enabled at the bottleneck queue.
+  \item Random run: one or more \texttt{RngRun} values.
+  \item Flow mix: a single TCP flow or a configured pair of competing flows.
+\end{itemize}
+
+Configuration files record the same factors, plus topology-specific values such as access-link rate, access-link delay, device queue size, bottleneck rates, bottleneck delays, which bottleneck queue is traced, and flow timing parameters. When bottleneck delays are omitted, the C++ configuration object derives one-way delays from the requested base RTT. For mixed-flow runs, the second flow can start from a configured base time plus a bounded jitter that is driven by \texttt{RngRun}, making the stochastic element explicit in the artifact. The two-bottleneck template is presently used only as a smoke-path scenario; all paper-reported results use the single-bottleneck template, and the two-bottleneck campaign is left as future work.
+
+The same harness can run additional TCP TypeIds, such as BBR, but those results should be reported as an extension unless the campaign includes enough repetitions and discussion to interpret model-based pacing behavior fairly.
+
+The primary metrics are mean throughput, ping RTT, bottleneck queueing delay, congestion window, packet drops, and ECN marks after a warmup interval. Raw traces are retained so that additional metrics can be computed without rerunning simulations.

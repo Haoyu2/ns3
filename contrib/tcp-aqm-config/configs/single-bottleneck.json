@@ -1,0 +1,51 @@
+{
+  "experiment": {
+    "firstTcpType": "cubic",
+    "secondTcpType": "",
+    "queueType": "codel",
+    "baseRtt": "80ms",
+    "ceThreshold": "1ms",
+    "linkRate": "50Mbps",
+    "stopTime": "40s",
+    "firstStartTime": "5s",
+    "secondStartTime": "15s",
+    "secondStartJitter": "0s",
+    "firstStartJitter": "0s",
+    "queueUseEcn": true,
+    "enablePcap": false,
+    "rngRun": 1
+  },
+  "topology": {
+    "kind": "single-bottleneck",
+    "accessRate": "1000Mbps",
+    "accessDelay": "1us",
+    "deviceQueueSize": "3p",
+    "bottlenecks": [
+      {
+        "name": "core",
+        "rate": "50Mbps",
+        "delay": "",
+        "queueType": "codel",
+        "trace": true
+      }
+    ]
+  },
+  "sweep": {
+    "enabled": true,
+    "name": "rtt-sensitivity",
+    "parameter": "experiment.baseRtt",
+    "values": [
+      "10ms",
+      "50ms",
+      "80ms"
+    ]
+  },
+  "analysis": {
+    "metrics": [
+      "throughput_mean_mbps",
+      "ping_rtt_p95_ms",
+      "queue_delay_p95_ms",
+      "mark_count"
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+\section{Evaluation Results}
+
+The current evaluation is artifact-first: every plotted result is derived from a preserved CSV table, and each table can be traced back to per-run metadata and raw ns-3 traces. The pilot campaign contains 180 successful single-flow runs and 36 successful mixed-flow runs, with zero failed return codes. These runs expose the main sensitivity patterns and identify which configurations need a longer final timing campaign.
+
+\begin{table}[t]
+  \caption{Validated single-flow campaign. DCTCP without ECN is excluded from the main comparison.}
+  \label{tab:matrix}
+  \centering
+  \small
+  \begin{tabular}{@{}ll@{}}
+    \toprule
+    Factor & Values \\
+    \midrule
+    TCP & Linux Reno, CUBIC, DCTCP \\
+    Queue discipline & CoDel, FQ-CoDel, PIE, RED \\
+    Base RTT & 10, 50, 80 ms \\
+    ECN & off/on (DCTCP requires on) \\
+    Seeds & 3 \texttt{RngRun} values \\
+    Stop / warmup & 40 s / 10 s \\
+    Rows (per-run / aggregate) & 180 / 60 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Single-Flow Throughput Dispersion Across RTT}
+
+Figure~\ref{fig:rtt-sensitivity} summarizes how each ECN-enabled single-flow configuration's mean throughput disperses across base RTT, reported as $100\cdot(\max-\min)/\max$ over the three RTT means. We use the term \emph{dispersion} rather than \emph{sensitivity} to avoid implying a monotone response: this metric measures spread, not signed slope. PIE produces the widest dispersion in this pilot matrix: DCTCP/PIE varies by 51.6\% of its maximum throughput across 10, 50, and 80 ms, while Reno/PIE and CUBIC/PIE vary by about 32\%. DCTCP with CoDel and FQ-CoDel also varies by about 31\%, showing that low-delay behavior does not automatically imply RTT-insensitive throughput.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.84\textwidth]{\RttSensitivityFigure}
+  \caption{Single-flow throughput dispersion across 10, 50, and 80 ms base RTT for ECN-enabled configurations. Bars are $100\cdot(\max-\min)/\max$ of mean throughput across the three RTT settings; this measures spread, not signed slope.}
+  \Description{Horizontal bar chart ranking ECN-enabled TCP and queue configurations by throughput dispersion across base RTT values.}
+  \label{fig:rtt-sensitivity}
+\end{figure*}
+
+The full single-flow throughput/delay scatter and Pareto-frontier table are archived with the artifact. They show why a single ranking is misleading: CUBIC often remains near the throughput frontier, while DCTCP can occupy low-delay points with lower throughput at high RTT. RED and CoDel appear frequently on the non-dominated frontier in this pilot, while PIE appears only once. Single-flow aggregate confidence intervals are not reported here because the pilot campaign drove no stochastic input in the single-flow scenario; the three \texttt{RngRun} values produce numerically identical traces, so the corresponding 95\% confidence intervals are structurally zero rather than tight. The harness records the per-run \texttt{rngRun} value regardless, and future single-flow campaigns can produce meaningful confidence intervals by sweeping the existing \texttt{firstStartTime} field or by enabling the new \texttt{firstStartJitter} input.
+
+\subsection{Mixed-Flow Behavior}
+
+The mixed-flow campaign uses three TCP pairs, CoDel and FQ-CoDel, 10 ms and 80 ms base RTT, ECN enabled, and three \texttt{RngRun} values. The second flow starts at 10 s plus up to 5 s of random-run-driven jitter, the stop time is 40 s, and the analysis discards the first 20 s. This campaign produced 36 successful runs and 12 aggregate rows.
+
+Figure~\ref{fig:mixed-share} shows that total bottleneck utilization can hide large per-flow asymmetry. At 10 ms, DCTCP receives 95.8\% of total throughput when paired with CUBIC under CoDel and 88.3\% when paired with Reno. FQ-CoDel improves the CUBIC/Reno pair most strongly: the 10 ms fairness score rises from 0.733 to 0.9998 with essentially unchanged total throughput. The FQ-CoDel fairness-delta chart and the complete mixed-flow table are archived in \CoreEvalDir{} and \PaperFigureDir{}.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.88\textwidth]{\MixedShareFigure}
+  \caption{Mixed-flow throughput share by TCP pair, queue discipline, and base RTT. The right column reports total throughput and Jain fairness.}
+  \Description{Stacked horizontal bar chart showing first-flow and second-flow throughput share for each mixed TCP pair.}
+  \label{fig:mixed-share}
+\end{figure*}
+
+\subsection{Warmup and Stability Audits}
+
+The analysis pipeline also recomputes each campaign under multiple warmup thresholds and compares the final quarter of each run against the preceding quarter. These audits are not a separate networking claim; they are a reproducibility check on whether the current 40 s pilot campaign is long enough for final performance conclusions.
+
+Figure~\ref{fig:warmup} shows that 32 of 72 aggregate configurations have more than 5\% throughput range across the tested warmups. The chart is grouped by campaign so both single-flow and mixed-flow are always represented: the top 12 single-flow rows out of 60, and the top 6 mixed-flow rows out of 12. The largest-warmup threshold in the sweep (30 s, paired with a 40 s stop time) leaves only ten seconds of measurement window and should be read as a stress test, not as a recommended operating point. The late-window audit similarly flags 97 of 252 observations with more than 5\% difference between the final quarter and the preceding quarter, with the largest deviations appearing in high-RTT DCTCP/PIE and selected mixed-flow cases. This converts a vague concern about transient behavior into a concrete next-step requirement: the final artifact should include a longer targeted campaign for the unstable configurations.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.86\textwidth]{\WarmupSensitivityFigure}
+  \caption{Warmup-sensitivity audit, grouped by campaign. Bars show the throughput range across tested warmup thresholds (5, 10, 20, 30 s for single-flow; 15, 20, 25, 30 s for mixed-flow) as a percentage of the maximum observed value. The chart shows the top 12 single-flow rows out of 60 and the top 6 mixed-flow rows out of 12; the full table is archived with the artifact.}
+  \Description{Two-group horizontal bar chart: top 12 single-flow configurations and top 6 mixed-flow configurations ranked by throughput variation across warmup thresholds.}
+  \label{fig:warmup}
+\end{figure*}
+
+The full single-flow aggregate table, mixed-flow aggregate table, derived audit CSVs, and additional vector figures are archived under \DataDir{} and \PaperFigureDir{}.

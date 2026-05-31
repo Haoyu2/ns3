@@ -50,3 +50,10 @@ vcpkg/
 
 # Ignore local cache used by e.g. clangd
 .cache/
+
+# ICNS3 2026 TCP/AQM benchmark branch additions
+.DS_Store
+__pycache__/
+AGENTS.md
+# Detached nested-paper-repo backup (restored by renaming back to .git)
+paper/icns3-2026-summer/.git-uno-overleaf-backup/

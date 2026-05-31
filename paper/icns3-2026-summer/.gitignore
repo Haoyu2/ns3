@@ -1,0 +1,15 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.pdf_tex
+main.pdf
+svg-inkscape/
+build-review-pages*/

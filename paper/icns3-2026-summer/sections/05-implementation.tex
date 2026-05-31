@@ -1,0 +1,67 @@
+\section{Workflow Implementation}
+
+The workflow consists of \TcpAqmModule{}, \TcpAqmBenchmark{}, and Python runner and analysis scripts. The contrib module defines typed C++ objects for experiment and topology configuration. These objects load YAML or JSON files through \texttt{yaml-cpp}, validate the experiment and topology sections, map TCP and queue-disc names into enum values, store scalar values as ns-3 \texttt{Time}, \texttt{DataRate}, and \texttt{QueueSize} objects, and derive omitted bottleneck delays from the configured base RTT.
+
+The C++ benchmark example resolves TCP aliases and TypeId names, configures the selected TCP variants per node, and keeps DCTCP-specific alpha tracing attached only when the resolved TypeId is DCTCP. This lets a campaign use short names such as \texttt{cubic} and \texttt{dctcp}, or full names such as \texttt{ns3::TcpBbr}, without changing the scenario source. The same binary can also be launched with \texttt{--configFile}, allowing a versioned configuration file to select a single-bottleneck or two-bottleneck topology and to control flow start times. For mixed-flow runs, the second flow can receive a bounded start-time jitter that is driven by the configured ns-3 random-run value.
+
+The runner expands a named experiment matrix and invokes \texttt{./ns3 run} for each configuration. Each run receives an explicit \texttt{rngRun} value and stores a compact set of run artifacts:\RunArtifactPaths{}
+
+\begin{itemize}
+  \item Run metadata in \MetadataFile{}, including parameters, ns-3 commit, branch state, working-tree status, SHA-256 hashes of every benchmark and configuration source file that contributed to the run, a snapshot of ns-3-relevant environment variables (\texttt{NS\_LOG}, \texttt{NS\_GLOBAL\_VALUE}, \texttt{LD\_LIBRARY\_PATH}, and similar), return code, resolved trace files, and wall-clock time.
+  \item \CommandFile{}, containing the exact ns-3 command.
+  \item \StdoutFile{} and \StderrFile{}.
+  \item Raw \TraceGlob{} trace files.
+\end{itemize}
+
+When the working tree contains modifications to the benchmark example, the contrib module sources, or any configuration file referenced by the run, the runner prints a warning. The per-file SHA-256 hashes still pin the exact source bytes used by that run, so a dirty tree does not silently invalidate the artifact.
+
+The analyzer reads each run directory and writes a campaign-level \SummaryCsv{} and \SummaryAggregateCsv{}. The summaries include throughput, RTT, queueing delay, congestion window, drop count, mark count, and, for mixed-flow runs, second-flow throughput, total throughput, and Jain fairness (defined for the two-flow case used in this study). The analyzer clamps a configured warmup threshold below the first-flow start time so that pre-flow zero samples cannot deflate mean throughput. A dependency-free SVG plotter creates quick figures from the aggregate table for inspection before final plotting.
+
+The contrib module includes a validation executable that loads a YAML or JSON file and prints the normalized configuration. This provides a lightweight check that configuration files are syntactically valid, semantically complete, and produce the intended derived topology values before a campaign is launched.
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[
+    node distance=0.6em and 0.6em,
+    stage/.style={
+      draw=black!55,
+      line width=0.4pt,
+      fill=black!4,
+      rounded corners=3pt,
+      align=center,
+      text width=0.86\columnwidth,
+      inner sep=5pt,
+      font=\scriptsize,
+    },
+    header/.style={font=\scriptsize\bfseries},
+    arrow/.style={
+      -{Latex[length=2.2mm,width=1.8mm]},
+      line width=0.7pt,
+      draw=black!75,
+    },
+  ]
+    \node[stage] (config) {%
+      \textbf{Inputs}\\[1pt]
+      YAML/JSON configs and named matrix\\
+      \scriptsize TCP pair, queue, RTT, ECN, topology, \texttt{rngRun}};
+    \node[stage, below=of config] (runner) {%
+      \textbf{Python runner}\\[1pt]
+      expands matrix, writes per-run \ConfigJson{}, invokes ns-3};
+    \node[stage, below=of runner] (ns3) {%
+      \textbf{\TcpAqmModule{} example}\\[1pt]
+      \TcpAqmBenchmark{} loads typed config, builds topology, emits traces};
+    \node[stage, below=of ns3] (runs) {%
+      \textbf{Run directories}\\[1pt]
+      \MetadataFile{}, command, stdout/stderr, raw trace files};
+    \node[stage, below=of runs] (analysis) {%
+      \textbf{Analysis and paper artifacts}\\[1pt]
+      \SummaryCsv{}, aggregate CSVs, SVG figures, LaTeX tables};
+    \draw[arrow] (config) -- (runner);
+    \draw[arrow] (runner) -- (ns3);
+    \draw[arrow] (ns3) -- (runs);
+    \draw[arrow] (runs) -- (analysis);
+  \end{tikzpicture}
+  \caption{Reproducible TCP/AQM benchmark workflow. Each stage's output is the input of the stage below.}
+  \Description{Vertical workflow diagram with five stages: inputs, Python runner, ns-3 benchmark example, run directories, and analysis artifacts; each stage is connected to the next by a downward arrow.}
+  \label{fig:workflow}
+\end{figure}

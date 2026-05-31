@@ -1,0 +1,28 @@
+% acronyms.tex
+
+\chapter*{List of Acronyms}
+\addcontentsline{toc}{chapter}{List of Acronyms}
+
+% below is the list of acronym definitions, place them in alphabetical order
+% since they will not be sorted again. 
+\begin{acronym}
+\acro{RDD}{Resilient Distributed Dataset}.
+RDD represents an immutable, partitioned collection of elements in Apache Spark.
+
+\acro{GC}{Garbage Collection}.
+Java heap garbage collection mechanism.
+
+\acro{SMM}{Static Memory Manager}.
+	The memory manger used before Apache Spark 1.6.0, which is deprecated in later versions. SMM allocates memory statically which is configured before submitting applications.
+\acro{UMM}{Unified Memory Manager}.
+    The memory manger used since Apache Spark 1.6.0, allocating memory based on execution requirement.
+\acro{ATMM}{Auto Tuning Memory manager}.
+  A memory manager designed for allocating memory based on execution time and GC of a task.
+
+\acro{DAG}{Directed Acyclic Graph}.
+Represents work flow of a Spark job, where vertices represent RDDs and edges represent transactions. 
+
+\acro{LRU}{Least Recently Used}.
+A caching algorithm that always keeps the least recently used objects. 
+
+\end{acronym}

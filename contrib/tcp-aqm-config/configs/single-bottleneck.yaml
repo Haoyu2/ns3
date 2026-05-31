@@ -1,0 +1,51 @@
+# SPDX-License-Identifier: BSD-3-Clause
+
+experiment:
+  firstTcpType: cubic
+  secondTcpType: ""
+  queueType: codel
+  baseRtt: 80ms
+  ceThreshold: 1ms
+  linkRate: 50Mbps
+  stopTime: 40s
+  firstStartTime: 5s
+  secondStartTime: 15s
+  secondStartJitter: 0s
+  # Add real per-RngRun variance in single-flow campaigns by enabling
+  # firstStartJitter. With this field unset (or zero) the simulation is
+  # deterministic, so any 95% confidence interval over multiple seeds is
+  # structurally zero. The jitter is sampled from RngRun-seeded RNG.
+  firstStartJitter: 0s
+  queueUseEcn: true
+  enablePcap: false
+  rngRun: 1
+
+topology:
+  kind: single-bottleneck
+  accessRate: 1000Mbps
+  accessDelay: 1us
+  deviceQueueSize: 3p
+  bottlenecks:
+    - name: core
+      rate: 50Mbps
+      # Empty delay means the C++ config object derives one-way bottleneck
+      # delay from baseRtt. For a single bottleneck this becomes baseRtt / 2.
+      delay: ""
+      queueType: codel
+      trace: true
+
+sweep:
+  enabled: true
+  name: rtt-sensitivity
+  parameter: experiment.baseRtt
+  values:
+    - 10ms
+    - 50ms
+    - 80ms
+
+analysis:
+  metrics:
+    - throughput_mean_mbps
+    - ping_rtt_p95_ms
+    - queue_delay_p95_ms
+    - mark_count

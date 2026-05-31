@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="500" viewBox="0 0 880 500">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #1F2933; }
+  .title       { font-size: 15px; font-weight: 600; }
+  .subtitle    { font-size: 11px; fill: #52606D; }
+  .axis-label  { font-size: 11px; }
+  .tick        { font-size: 10px; fill: #52606D; }
+  .row-label   { font-size: 11px; }
+  .value       { font-size: 10px; fill: #1F2933; }
+  .extra       { font-size: 10px; fill: #52606D; }
+  .legend      { font-size: 10px; }
+  .grid        { stroke: #E4E7EB; stroke-width: 1; shape-rendering: crispEdges; }
+  .axis-line   { stroke: #3E4C59; stroke-width: 1; shape-rendering: crispEdges; }
+  .zero-line   { stroke: #1F2933; stroke-width: 1.2; shape-rendering: crispEdges; }
+  .bar         { stroke: none; }
+</style>
+<rect x="0" y="0" width="880" height="500" fill="#FFFFFF"/>
+<text class="title" x="440.0" y="26" text-anchor="middle">Single-Flow Throughput vs. Queueing Delay</text>
+<text class="subtitle" x="440.0" y="44" text-anchor="middle">ECN-enabled configurations. Larger markers are non-dominated within their RTT group. X-axis is truncated — spread between points is visually exaggerated.</text>
+<circle cx="89.0" cy="70.0" r="5" fill="#0072B2"/>
+<text class="legend" x="102.0" y="74.0">cubic</text>
+<circle cx="156.0" cy="70.0" r="5" fill="#009E73"/>
+<text class="legend" x="169.0" y="74.0">reno</text>
+<circle cx="223.0" cy="70.0" r="5" fill="#D55E00"/>
+<text class="legend" x="236.0" y="74.0">dctcp</text>
+<rect x="374.0" y="64.0" width="12" height="12" fill="#4C6FA1"/>
+<text class="legend" x="392.0" y="74.0">codel</text>
+<rect x="441.0" y="64.0" width="12" height="12" fill="#7B5EA7"/>
+<text class="legend" x="459.0" y="74.0">fq</text>
+<rect x="508.0" y="64.0" width="12" height="12" fill="#C97D2A"/>
+<text class="legend" x="526.0" y="74.0">pie</text>
+<rect x="575.0" y="64.0" width="12" height="12" fill="#B44B5C"/>
+<text class="legend" x="593.0" y="74.0">red</text>
+<line class="grid" x1="78.0" y1="86.0" x2="78.0" y2="436.0"/>
+<text class="tick" x="78.0" y="458.0" text-anchor="middle">20.6</text>
+<line class="grid" x1="232.8" y1="86.0" x2="232.8" y2="436.0"/>
+<text class="tick" x="232.8" y="458.0" text-anchor="middle">26.5</text>
+<line class="grid" x1="387.6" y1="86.0" x2="387.6" y2="436.0"/>
+<text class="tick" x="387.6" y="458.0" text-anchor="middle">32.4</text>
+<line class="grid" x1="542.4" y1="86.0" x2="542.4" y2="436.0"/>
+<text class="tick" x="542.4" y="458.0" text-anchor="middle">38.3</text>
+<line class="grid" x1="697.2" y1="86.0" x2="697.2" y2="436.0"/>
+<text class="tick" x="697.2" y="458.0" text-anchor="middle">44.2</text>
+<line class="grid" x1="852.0" y1="86.0" x2="852.0" y2="436.0"/>
+<text class="tick" x="852.0" y="458.0" text-anchor="middle">50.1</text>
+<line class="grid" x1="78.0" y1="436.0" x2="852.0" y2="436.0"/>
+<text class="tick" x="70.0" y="439.0" text-anchor="end">0.00</text>
+<line class="grid" x1="78.0" y1="366.0" x2="852.0" y2="366.0"/>
+<text class="tick" x="70.0" y="369.0" text-anchor="end">0.91</text>
+<line class="grid" x1="78.0" y1="296.0" x2="852.0" y2="296.0"/>
+<text class="tick" x="70.0" y="299.0" text-anchor="end">1.82</text>
+<line class="grid" x1="78.0" y1="226.0" x2="852.0" y2="226.0"/>
+<text class="tick" x="70.0" y="229.0" text-anchor="end">2.74</text>
+<line class="grid" x1="78.0" y1="156.0" x2="852.0" y2="156.0"/>
+<text class="tick" x="70.0" y="159.0" text-anchor="end">3.65</text>
+<line class="grid" x1="78.0" y1="86.0" x2="852.0" y2="86.0"/>
+<text class="tick" x="70.0" y="89.0" text-anchor="end">4.56</text>
+<line class="axis-line" x1="78" y1="436.0" x2="852.0" y2="436.0"/>
+<line class="axis-line" x1="78" y1="86.0" x2="78" y2="436.0"/>
+<text class="axis-label tick" x="465.0" y="480.0" text-anchor="middle">Throughput (Mbit/s)</text>
+<text class="axis-label tick" transform="translate(22 261.0) rotate(-90)" text-anchor="middle">Mean queueing delay (ms)</text>
+<circle cx="801.5" cy="197.6" r="4.0" fill="#0072B2" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<circle cx="740.3" cy="362.0" r="6.5" fill="#0072B2" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="749.3" y="355.0">cubic/codel/50ms</text>
+<circle cx="698.3" cy="379.9" r="6.5" fill="#0072B2" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="707.3" y="372.9">cubic/codel/80ms</text>
+<circle cx="801.5" cy="197.7" r="4.0" fill="#0072B2" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<circle cx="740.3" cy="362.0" r="4.0" fill="#0072B2" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<circle cx="698.3" cy="379.9" r="6.5" fill="#0072B2" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="707.3" y="372.9">cubic/fq/80ms</text>
+<circle cx="764.3" cy="382.2" r="4.0" fill="#0072B2" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="367.5" cy="407.5" r="4.0" fill="#0072B2" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="370.5" cy="372.0" r="4.0" fill="#0072B2" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="782.6" cy="400.0" r="6.5" fill="#0072B2" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="791.6" y="393.0">cubic/red/10ms</text>
+<circle cx="500.1" cy="417.4" r="6.5" fill="#0072B2" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="509.1" y="410.4">cubic/red/50ms</text>
+<circle cx="443.5" cy="413.9" r="6.5" fill="#0072B2" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="452.5" y="406.9">cubic/red/80ms</text>
+<circle cx="801.5" cy="390.9" r="6.5" fill="#D55E00" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="810.5" y="383.9">dctcp/codel/10ms</text>
+<circle cx="729.6" cy="411.3" r="6.5" fill="#D55E00" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="738.6" y="404.3">dctcp/codel/50ms</text>
+<circle cx="407.1" cy="418.2" r="6.5" fill="#D55E00" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="416.1" y="411.2">dctcp/codel/80ms</text>
+<circle cx="801.5" cy="390.8" r="4.0" fill="#D55E00" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<circle cx="729.6" cy="411.2" r="4.0" fill="#D55E00" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<circle cx="406.5" cy="419.2" r="6.5" fill="#D55E00" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="415.5" y="412.2">dctcp/fq/80ms</text>
+<circle cx="749.1" cy="186.7" r="4.0" fill="#D55E00" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="124.9" cy="343.1" r="4.0" fill="#D55E00" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="244.3" cy="373.7" r="4.0" fill="#D55E00" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="801.5" cy="139.4" r="6.5" fill="#D55E00" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="810.5" y="132.4">dctcp/red/10ms</text>
+<circle cx="769.1" cy="218.2" r="6.5" fill="#D55E00" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="778.1" y="211.2">dctcp/red/50ms</text>
+<circle cx="460.1" cy="351.0" r="4.0" fill="#D55E00" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<circle cx="786.5" cy="196.7" r="4.0" fill="#009E73" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<circle cx="589.9" cy="372.5" r="4.0" fill="#009E73" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<circle cx="551.7" cy="391.6" r="6.5" fill="#009E73" stroke="#4C6FA1" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="560.7" y="384.6">reno/codel/80ms</text>
+<circle cx="786.5" cy="196.5" r="4.0" fill="#009E73" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<circle cx="589.8" cy="372.5" r="4.0" fill="#009E73" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<circle cx="551.7" cy="391.5" r="6.5" fill="#009E73" stroke="#7B5EA7" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="560.7" y="384.5">reno/fq/80ms</text>
+<circle cx="658.4" cy="280.0" r="4.0" fill="#009E73" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="586.3" cy="374.3" r="4.0" fill="#009E73" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="293.4" cy="401.6" r="4.0" fill="#009E73" stroke="#C97D2A" stroke-width="1.6" opacity="0.92"/>
+<circle cx="723.9" cy="337.3" r="4.0" fill="#009E73" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<circle cx="526.8" cy="416.2" r="6.5" fill="#009E73" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="535.8" y="409.2">reno/red/50ms</text>
+<circle cx="356.0" cy="423.6" r="6.5" fill="#009E73" stroke="#B44B5C" stroke-width="1.6" opacity="0.92"/>
+<text class="extra" x="365.0" y="416.6">reno/red/80ms</text>
+</svg>

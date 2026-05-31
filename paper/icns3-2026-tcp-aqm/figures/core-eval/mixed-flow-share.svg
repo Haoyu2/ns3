@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="452" viewBox="0 0 920 452">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #1F2933; }
+  .title       { font-size: 15px; font-weight: 600; }
+  .subtitle    { font-size: 11px; fill: #52606D; }
+  .axis-label  { font-size: 11px; }
+  .tick        { font-size: 10px; fill: #52606D; }
+  .row-label   { font-size: 11px; }
+  .value       { font-size: 10px; fill: #1F2933; }
+  .extra       { font-size: 10px; fill: #52606D; }
+  .legend      { font-size: 10px; }
+  .grid        { stroke: #E4E7EB; stroke-width: 1; shape-rendering: crispEdges; }
+  .axis-line   { stroke: #3E4C59; stroke-width: 1; shape-rendering: crispEdges; }
+  .zero-line   { stroke: #1F2933; stroke-width: 1.2; shape-rendering: crispEdges; }
+  .bar         { stroke: none; }
+</style>
+<rect x="0" y="0" width="920" height="452" fill="#FFFFFF"/>
+<text class="title" x="460.0" y="26" text-anchor="middle">Mixed-Flow Throughput Share</text>
+<text class="subtitle" x="460.0" y="44" text-anchor="middle">Stacked share of bottleneck goodput. Right column reports total throughput and Jain fairness.</text>
+<rect x="200.0" y="58.0" width="12" height="12" fill="#0072B2"/>
+<text class="legend" x="218.0" y="68.0">cubic</text>
+<rect x="267.0" y="58.0" width="12" height="12" fill="#009E73"/>
+<text class="legend" x="285.0" y="68.0">reno</text>
+<rect x="334.0" y="58.0" width="12" height="12" fill="#D55E00"/>
+<text class="legend" x="352.0" y="68.0">dctcp</text>
+<line class="grid" x1="455.0" y1="80.0" x2="455.0" y2="396.0"/>
+<text class="extra" x="455.0" y="430.0" text-anchor="middle">equal share (50%)</text>
+<text class="row-label" x="190.0" y="101.0" text-anchor="end">cubic/dctcp • codel • 10ms</text>
+<rect class="bar" x="200.0" y="89.0" width="21.3" height="16" fill="#0072B2"/>
+<rect class="bar" x="221.3" y="89.0" width="488.7" height="16" fill="#D55E00"/>
+<text class="value" x="465.7" y="101.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">96%</text>
+<text class="extra" x="722.0" y="101.0">total 48.2 Mb/s, Jain 0.544</text>
+<text class="row-label" x="190.0" y="127.0" text-anchor="end">cubic/dctcp • fq • 10ms</text>
+<rect class="bar" x="200.0" y="115.0" width="53.0" height="16" fill="#0072B2"/>
+<rect class="bar" x="253.0" y="115.0" width="457.0" height="16" fill="#D55E00"/>
+<text class="value" x="226.5" y="127.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">10%</text>
+<text class="value" x="481.5" y="127.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">90%</text>
+<text class="extra" x="722.0" y="127.0">total 48.2 Mb/s, Jain 0.614</text>
+<text class="row-label" x="190.0" y="153.0" text-anchor="end">cubic/dctcp • codel • 80ms</text>
+<rect class="bar" x="200.0" y="141.0" width="188.3" height="16" fill="#0072B2"/>
+<rect class="bar" x="388.3" y="141.0" width="321.7" height="16" fill="#D55E00"/>
+<text class="value" x="294.2" y="153.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">37%</text>
+<text class="value" x="549.2" y="153.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">63%</text>
+<text class="extra" x="722.0" y="153.0">total 43.5 Mb/s, Jain 0.935</text>
+<text class="row-label" x="190.0" y="179.0" text-anchor="end">cubic/dctcp • fq • 80ms</text>
+<rect class="bar" x="200.0" y="167.0" width="179.7" height="16" fill="#0072B2"/>
+<rect class="bar" x="379.7" y="167.0" width="330.3" height="16" fill="#D55E00"/>
+<text class="value" x="289.9" y="179.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">35%</text>
+<text class="value" x="544.9" y="179.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">65%</text>
+<text class="extra" x="722.0" y="179.0">total 43.0 Mb/s, Jain 0.920</text>
+<text class="row-label" x="190.0" y="205.0" text-anchor="end">cubic/reno • codel • 10ms</text>
+<rect class="bar" x="200.0" y="193.0" width="100.9" height="16" fill="#0072B2"/>
+<rect class="bar" x="300.9" y="193.0" width="409.1" height="16" fill="#009E73"/>
+<text class="value" x="250.5" y="205.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">20%</text>
+<text class="value" x="505.5" y="205.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">80%</text>
+<text class="extra" x="722.0" y="205.0">total 47.9 Mb/s, Jain 0.733</text>
+<text class="row-label" x="190.0" y="231.0" text-anchor="end">cubic/reno • fq • 10ms</text>
+<rect class="bar" x="200.0" y="219.0" width="258.5" height="16" fill="#0072B2"/>
+<rect class="bar" x="458.5" y="219.0" width="251.5" height="16" fill="#009E73"/>
+<text class="value" x="329.2" y="231.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">51%</text>
+<text class="value" x="584.2" y="231.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">49%</text>
+<text class="extra" x="722.0" y="231.0">total 48.2 Mb/s, Jain 1.000</text>
+<text class="row-label" x="190.0" y="257.0" text-anchor="end">cubic/reno • codel • 80ms</text>
+<rect class="bar" x="200.0" y="245.0" width="288.0" height="16" fill="#0072B2"/>
+<rect class="bar" x="488.0" y="245.0" width="222.0" height="16" fill="#009E73"/>
+<text class="value" x="344.0" y="257.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">56%</text>
+<text class="value" x="599.0" y="257.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">44%</text>
+<text class="extra" x="722.0" y="257.0">total 45.5 Mb/s, Jain 0.963</text>
+<text class="row-label" x="190.0" y="283.0" text-anchor="end">cubic/reno • fq • 80ms</text>
+<rect class="bar" x="200.0" y="271.0" width="283.5" height="16" fill="#0072B2"/>
+<rect class="bar" x="483.5" y="271.0" width="226.5" height="16" fill="#009E73"/>
+<text class="value" x="341.8" y="283.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">56%</text>
+<text class="value" x="596.8" y="283.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">44%</text>
+<text class="extra" x="722.0" y="283.0">total 44.8 Mb/s, Jain 0.987</text>
+<text class="row-label" x="190.0" y="309.0" text-anchor="end">reno/dctcp • codel • 10ms</text>
+<rect class="bar" x="200.0" y="297.0" width="59.5" height="16" fill="#009E73"/>
+<rect class="bar" x="259.5" y="297.0" width="450.5" height="16" fill="#D55E00"/>
+<text class="value" x="229.7" y="309.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">12%</text>
+<text class="value" x="484.7" y="309.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">88%</text>
+<text class="extra" x="722.0" y="309.0">total 47.4 Mb/s, Jain 0.630</text>
+<text class="row-label" x="190.0" y="335.0" text-anchor="end">reno/dctcp • fq • 10ms</text>
+<rect class="bar" x="200.0" y="323.0" width="63.0" height="16" fill="#009E73"/>
+<rect class="bar" x="263.0" y="323.0" width="447.0" height="16" fill="#D55E00"/>
+<text class="value" x="231.5" y="335.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">12%</text>
+<text class="value" x="486.5" y="335.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">88%</text>
+<text class="extra" x="722.0" y="335.0">total 47.4 Mb/s, Jain 0.638</text>
+<text class="row-label" x="190.0" y="361.0" text-anchor="end">reno/dctcp • codel • 80ms</text>
+<rect class="bar" x="200.0" y="349.0" width="164.7" height="16" fill="#009E73"/>
+<rect class="bar" x="364.7" y="349.0" width="345.3" height="16" fill="#D55E00"/>
+<text class="value" x="282.3" y="361.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">32%</text>
+<text class="value" x="537.3" y="361.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">68%</text>
+<text class="extra" x="722.0" y="361.0">total 40.7 Mb/s, Jain 0.888</text>
+<text class="row-label" x="190.0" y="387.0" text-anchor="end">reno/dctcp • fq • 80ms</text>
+<rect class="bar" x="200.0" y="375.0" width="167.7" height="16" fill="#009E73"/>
+<rect class="bar" x="367.7" y="375.0" width="342.3" height="16" fill="#D55E00"/>
+<text class="value" x="283.9" y="387.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">33%</text>
+<text class="value" x="538.9" y="387.0" text-anchor="middle" style="fill:#FFFFFF;font-weight:600;">67%</text>
+<text class="extra" x="722.0" y="387.0">total 41.3 Mb/s, Jain 0.895</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="276" viewBox="0 0 880 276">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #1F2933; }
+  .title       { font-size: 15px; font-weight: 600; }
+  .subtitle    { font-size: 11px; fill: #52606D; }
+  .axis-label  { font-size: 11px; }
+  .tick        { font-size: 10px; fill: #52606D; }
+  .row-label   { font-size: 11px; }
+  .value       { font-size: 10px; fill: #1F2933; }
+  .extra       { font-size: 10px; fill: #52606D; }
+  .legend      { font-size: 10px; }
+  .grid        { stroke: #E4E7EB; stroke-width: 1; shape-rendering: crispEdges; }
+  .axis-line   { stroke: #3E4C59; stroke-width: 1; shape-rendering: crispEdges; }
+  .zero-line   { stroke: #1F2933; stroke-width: 1.2; shape-rendering: crispEdges; }
+  .bar         { stroke: none; }
+</style>
+<rect x="0" y="0" width="880" height="276" fill="#FFFFFF"/>
+<text class="title" x="440.0" y="26" text-anchor="middle">FQ-CoDel Fairness Change vs. CoDel (Mixed Flows)</text>
+<rect x="240.0" y="60.0" width="12" height="12" fill="#009E73"/>
+<text class="legend" x="258.0" y="70.0">FQ-CoDel fairer</text>
+<rect x="387.6" y="60.0" width="12" height="12" fill="#D55E00"/>
+<text class="legend" x="405.6" y="70.0">FQ-CoDel less fair</text>
+<line class="grid" x1="240.0" y1="84.0" x2="240.0" y2="220.0"/>
+<text class="tick" x="240.0" y="234.0" text-anchor="middle">-0.30</text>
+<line class="grid" x1="344.0" y1="84.0" x2="344.0" y2="220.0"/>
+<text class="tick" x="344.0" y="234.0" text-anchor="middle">-0.18</text>
+<line class="grid" x1="448.0" y1="84.0" x2="448.0" y2="220.0"/>
+<text class="tick" x="448.0" y="234.0" text-anchor="middle">-0.06</text>
+<line class="grid" x1="552.0" y1="84.0" x2="552.0" y2="220.0"/>
+<text class="tick" x="552.0" y="234.0" text-anchor="middle">0.06</text>
+<line class="grid" x1="656.0" y1="84.0" x2="656.0" y2="220.0"/>
+<text class="tick" x="656.0" y="234.0" text-anchor="middle">0.18</text>
+<line class="grid" x1="760.0" y1="84.0" x2="760.0" y2="220.0"/>
+<text class="tick" x="760.0" y="234.0" text-anchor="middle">0.30</text>
+<line class="zero-line" x1="500.0" y1="84.0" x2="500.0" y2="220.0"/>
+<line class="axis-line" x1="240" y1="220.0" x2="760" y2="220.0"/>
+<text class="axis-label tick" x="500.0" y="254.0" text-anchor="middle">Jain fairness delta (FQ-CoDel minus CoDel)</text>
+<text class="row-label" x="230.0" y="103.0" text-anchor="end">cubic/reno • 10ms</text>
+<rect class="bar" x="500.0" y="92.0" width="232.1" height="14" fill="#D55E00"/>
+<text class="value" x="738.1" y="103.0" text-anchor="start">0.27</text>
+<text class="extra" x="862.0" y="103.0" text-anchor="end">Δdelay 0.01 ms</text>
+<text class="row-label" x="230.0" y="125.0" text-anchor="end">cubic/dctcp • 10ms</text>
+<rect class="bar" x="500.0" y="114.0" width="61.5" height="14" fill="#D55E00"/>
+<text class="value" x="567.5" y="125.0" text-anchor="start">0.07</text>
+<text class="extra" x="862.0" y="125.0" text-anchor="end">Δdelay -0.09 ms</text>
+<text class="row-label" x="230.0" y="147.0" text-anchor="end">cubic/reno • 80ms</text>
+<rect class="bar" x="500.0" y="136.0" width="20.8" height="14" fill="#D55E00"/>
+<text class="value" x="526.8" y="147.0" text-anchor="start">0.02</text>
+<text class="extra" x="862.0" y="147.0" text-anchor="end">Δdelay -0.63 ms</text>
+<text class="row-label" x="230.0" y="169.0" text-anchor="end">reno/dctcp • 10ms</text>
+<rect class="bar" x="500.0" y="158.0" width="7.3" height="14" fill="#D55E00"/>
+<text class="value" x="513.3" y="169.0" text-anchor="start">0.01</text>
+<text class="extra" x="862.0" y="169.0" text-anchor="end">Δdelay -0.03 ms</text>
+<text class="row-label" x="230.0" y="191.0" text-anchor="end">reno/dctcp • 80ms</text>
+<rect class="bar" x="500.0" y="180.0" width="5.8" height="14" fill="#D55E00"/>
+<text class="value" x="511.8" y="191.0" text-anchor="start">0.01</text>
+<text class="extra" x="862.0" y="191.0" text-anchor="end">Δdelay -0.00 ms</text>
+<text class="row-label" x="230.0" y="213.0" text-anchor="end">cubic/dctcp • 80ms</text>
+<rect class="bar" x="486.3" y="202.0" width="13.7" height="14" fill="#009E73"/>
+<text class="value" x="480.3" y="213.0" text-anchor="end">-0.02</text>
+<text class="extra" x="862.0" y="213.0" text-anchor="end">Δdelay -0.01 ms</text>
+</svg>

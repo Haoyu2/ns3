@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="672" viewBox="0 0 880 672">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; fill: #1F2933; }
+  .title       { font-size: 15px; font-weight: 600; }
+  .subtitle    { font-size: 11px; fill: #52606D; }
+  .axis-label  { font-size: 11px; }
+  .tick        { font-size: 10px; fill: #52606D; }
+  .row-label   { font-size: 11px; }
+  .value       { font-size: 10px; fill: #1F2933; }
+  .extra       { font-size: 10px; fill: #52606D; }
+  .legend      { font-size: 10px; }
+  .grid        { stroke: #E4E7EB; stroke-width: 1; shape-rendering: crispEdges; }
+  .axis-line   { stroke: #3E4C59; stroke-width: 1; shape-rendering: crispEdges; }
+  .zero-line   { stroke: #1F2933; stroke-width: 1.2; shape-rendering: crispEdges; }
+  .bar         { stroke: none; }
+</style>
+<rect x="0" y="0" width="880" height="672" fill="#FFFFFF"/>
+<text class="title" x="440.0" y="26" text-anchor="middle">Queue Delay Change When Enabling ECN</text>
+<rect x="240.0" y="60.0" width="12" height="12" fill="#009E73"/>
+<text class="legend" x="258.0" y="70.0">ECN improved delay (lower)</text>
+<rect x="443.4" y="60.0" width="12" height="12" fill="#D55E00"/>
+<text class="legend" x="461.4" y="70.0">ECN worsened delay (higher)</text>
+<line class="grid" x1="240.0" y1="84.0" x2="240.0" y2="616.0"/>
+<text class="tick" x="240.0" y="630.0" text-anchor="middle">-0.13</text>
+<line class="grid" x1="344.0" y1="84.0" x2="344.0" y2="616.0"/>
+<text class="tick" x="344.0" y="630.0" text-anchor="middle">-0.08</text>
+<line class="grid" x1="448.0" y1="84.0" x2="448.0" y2="616.0"/>
+<text class="tick" x="448.0" y="630.0" text-anchor="middle">-0.03</text>
+<line class="grid" x1="552.0" y1="84.0" x2="552.0" y2="616.0"/>
+<text class="tick" x="552.0" y="630.0" text-anchor="middle">0.03</text>
+<line class="grid" x1="656.0" y1="84.0" x2="656.0" y2="616.0"/>
+<text class="tick" x="656.0" y="630.0" text-anchor="middle">0.08</text>
+<line class="grid" x1="760.0" y1="84.0" x2="760.0" y2="616.0"/>
+<text class="tick" x="760.0" y="630.0" text-anchor="middle">0.13</text>
+<line class="zero-line" x1="500.0" y1="84.0" x2="500.0" y2="616.0"/>
+<line class="axis-line" x1="240" y1="616.0" x2="760" y2="616.0"/>
+<text class="axis-label tick" x="500.0" y="650.0" text-anchor="middle">ECN minus non-ECN mean queue delay (ms)</text>
+<text class="row-label" x="230.0" y="103.0" text-anchor="end">reno • codel • 10ms</text>
+<rect class="bar" x="267.9" y="92.0" width="232.1" height="14" fill="#009E73"/>
+<text class="value" x="261.9" y="103.0" text-anchor="end">-0.12</text>
+<text class="extra" x="862.0" y="103.0" text-anchor="end">Δthroughput -0.44%</text>
+<text class="row-label" x="230.0" y="125.0" text-anchor="end">reno • red • 10ms</text>
+<rect class="bar" x="350.8" y="114.0" width="149.2" height="14" fill="#009E73"/>
+<text class="value" x="344.8" y="125.0" text-anchor="end">-0.08</text>
+<text class="extra" x="862.0" y="125.0" text-anchor="end">Δthroughput -1.84%</text>
+<text class="row-label" x="230.0" y="147.0" text-anchor="end">cubic • red • 10ms</text>
+<rect class="bar" x="500.0" y="136.0" width="33.4" height="14" fill="#D55E00"/>
+<text class="value" x="539.4" y="147.0" text-anchor="start">0.02</text>
+<text class="extra" x="862.0" y="147.0" text-anchor="end">Δthroughput -0.02%</text>
+<text class="row-label" x="230.0" y="169.0" text-anchor="end">cubic • codel • 10ms</text>
+<rect class="bar" x="467.0" y="158.0" width="33.0" height="14" fill="#009E73"/>
+<text class="value" x="461.0" y="169.0" text-anchor="end">-0.02</text>
+<text class="extra" x="862.0" y="169.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="191.0" text-anchor="end">reno • red • 50ms</text>
+<rect class="bar" x="500.0" y="180.0" width="16.3" height="14" fill="#D55E00"/>
+<text class="value" x="522.3" y="191.0" text-anchor="start">0.01</text>
+<text class="extra" x="862.0" y="191.0" text-anchor="end">Δthroughput 2.87%</text>
+<text class="row-label" x="230.0" y="213.0" text-anchor="end">cubic • red • 80ms</text>
+<rect class="bar" x="500.0" y="202.0" width="11.3" height="14" fill="#D55E00"/>
+<text class="value" x="517.3" y="213.0" text-anchor="start">0.01</text>
+<text class="extra" x="862.0" y="213.0" text-anchor="end">Δthroughput 0.01%</text>
+<text class="row-label" x="230.0" y="235.0" text-anchor="end">reno • codel • 80ms</text>
+<rect class="bar" x="500.0" y="224.0" width="7.9" height="14" fill="#D55E00"/>
+<text class="value" x="513.9" y="235.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="235.0" text-anchor="end">Δthroughput -0.53%</text>
+<text class="row-label" x="230.0" y="257.0" text-anchor="end">reno • codel • 50ms</text>
+<rect class="bar" x="500.0" y="246.0" width="6.8" height="14" fill="#D55E00"/>
+<text class="value" x="512.8" y="257.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="257.0" text-anchor="end">Δthroughput -0.16%</text>
+<text class="row-label" x="230.0" y="279.0" text-anchor="end">cubic • codel • 50ms</text>
+<rect class="bar" x="500.0" y="268.0" width="5.3" height="14" fill="#D55E00"/>
+<text class="value" x="511.3" y="279.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="279.0" text-anchor="end">Δthroughput -0.01%</text>
+<text class="row-label" x="230.0" y="301.0" text-anchor="end">cubic • codel • 80ms</text>
+<rect class="bar" x="500.0" y="290.0" width="5.2" height="14" fill="#D55E00"/>
+<text class="value" x="511.2" y="301.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="301.0" text-anchor="end">Δthroughput 0.03%</text>
+<text class="row-label" x="230.0" y="323.0" text-anchor="end">cubic • red • 50ms</text>
+<rect class="bar" x="500.0" y="312.0" width="4.5" height="14" fill="#D55E00"/>
+<text class="value" x="510.5" y="323.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="323.0" text-anchor="end">Δthroughput 0.09%</text>
+<text class="row-label" x="230.0" y="345.0" text-anchor="end">reno • red • 80ms</text>
+<rect class="bar" x="500.0" y="334.0" width="2.3" height="14" fill="#D55E00"/>
+<text class="value" x="508.3" y="345.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="345.0" text-anchor="end">Δthroughput -0.20%</text>
+<text class="row-label" x="230.0" y="367.0" text-anchor="end">cubic • fq • 10ms</text>
+<rect class="bar" x="500.0" y="356.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="367.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="367.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="389.0" text-anchor="end">cubic • fq • 50ms</text>
+<rect class="bar" x="500.0" y="378.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="389.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="389.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="411.0" text-anchor="end">cubic • fq • 80ms</text>
+<rect class="bar" x="500.0" y="400.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="411.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="411.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="433.0" text-anchor="end">cubic • pie • 10ms</text>
+<rect class="bar" x="500.0" y="422.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="433.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="433.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="455.0" text-anchor="end">cubic • pie • 50ms</text>
+<rect class="bar" x="500.0" y="444.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="455.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="455.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="477.0" text-anchor="end">cubic • pie • 80ms</text>
+<rect class="bar" x="500.0" y="466.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="477.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="477.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="499.0" text-anchor="end">reno • fq • 10ms</text>
+<rect class="bar" x="500.0" y="488.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="499.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="499.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="521.0" text-anchor="end">reno • fq • 50ms</text>
+<rect class="bar" x="500.0" y="510.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="521.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="521.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="543.0" text-anchor="end">reno • fq • 80ms</text>
+<rect class="bar" x="500.0" y="532.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="543.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="543.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="565.0" text-anchor="end">reno • pie • 10ms</text>
+<rect class="bar" x="500.0" y="554.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="565.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="565.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="587.0" text-anchor="end">reno • pie • 50ms</text>
+<rect class="bar" x="500.0" y="576.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="587.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="587.0" text-anchor="end">Δthroughput 0.00%</text>
+<text class="row-label" x="230.0" y="609.0" text-anchor="end">reno • pie • 80ms</text>
+<rect class="bar" x="500.0" y="598.0" width="1.0" height="14" fill="#6B7280"/>
+<text class="value" x="506.0" y="609.0" text-anchor="start">0.00</text>
+<text class="extra" x="862.0" y="609.0" text-anchor="end">Δthroughput 0.00%</text>
+</svg>

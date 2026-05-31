@@ -1,0 +1,4 @@
+sweep_name,sweep_parameter,sweep_value,first_tcp,second_tcp,topology,queue,base_rtt,ecn,n_runs,mark_count_mean,mark_count_ci95,ping_rtt_p95_ms_mean,ping_rtt_p95_ms_ci95,queue_delay_p95_ms_mean,queue_delay_p95_ms_ci95,throughput_mean_mbps_mean,throughput_mean_mbps_ci95
+rtt-sensitivity,experiment.baseRtt,10ms,cubic,,single-bottleneck,codel,10ms,1,1,8.0,nan,15.7317,nan,5.039999999999999,nan,48.19249333333333,nan
+rtt-sensitivity,experiment.baseRtt,50ms,cubic,,single-bottleneck,codel,50ms,1,1,5.0,nan,55.281454999999994,nan,4.58048,nan,45.85564266666666,nan
+rtt-sensitivity,experiment.baseRtt,80ms,cubic,,single-bottleneck,codel,80ms,1,1,4.0,nan,85.176625,nan,4.56,nan,44.25203,nan

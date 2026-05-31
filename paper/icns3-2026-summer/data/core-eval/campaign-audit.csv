@@ -1,0 +1,3 @@
+campaign,results_dir,run_dirs,metadata_files,missing_metadata,successful_runs,failed_runs,aggregate_rows,min_trace_files,max_trace_files
+single-flow,/Users/tiffanyzhang/haoyu/ns3-dev-summer26/paper/icns3-2026-tcp-aqm/results,180,180,0,180,0,60,8,9
+mixed-flow,/Users/tiffanyzhang/haoyu/ns3-dev-summer26/paper/icns3-2026-tcp-aqm/results-mixed,36,36,0,36,0,12,11,12

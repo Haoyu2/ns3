@@ -1,0 +1,25 @@
+\section{Artifact and Reproducibility}
+
+The artifact is organized so each run can be traced back to an exact command, parameter set, random-run value, and ns-3 commit. The runnable benchmark is \TcpAqmBenchmark{}; the upstream validation anchor, \TcpValidation{}, remains unchanged. A typical run directory contains \MetadataFile{}, \CommandFile{}, \StdoutFile{}, \StderrFile{}, and raw \TraceGlob{} traces.
+
+The paper repository archives the CSVs and figures used in this draft. Single-flow summaries are stored as \FullSummaryCsv{} and \FullSummaryAggregateCsv{}; mixed-flow summaries are stored as \MixedSummaryCsv{} and \MixedSummaryAggregateCsv{}. Derived evaluation tables are under \CoreEvalDir{}. The SVG sources and paper-facing PDF figures are under \PaperFigureDir{}.\PaperArtifactPaths{}
+
+\begin{table}[t]
+  \caption{Artifact commands and outputs. Exact command lines are preserved in the artifact README and per-run metadata.}
+  \label{tab:artifact-commands}
+  \centering
+  \small
+  \begin{tabularx}{\columnwidth}{@{}lX@{}}
+    \toprule
+    Step & Command family / output \\
+    \midrule
+    Single-flow campaign & Runner script in single-flow mode; analyzer uses a 10 s warmup. \\
+    Mixed-flow campaign & Runner script in mixed-flow mode; analyzer uses a 20 s warmup. \\
+    Core evaluation & Core analysis script derives sensitivity, fairness, warmup, and stability tables. \\
+    Figures & Plotter writes SVG charts; \RsvgConvert{} creates PDF figures for LaTeX builds. \\
+    Local paper build & Dependency check script, then \Latexmk{} builds \MainTex{}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+For submission, the artifact description should report the ns-3 commit hash, compiler, host platform, exact campaign command, warmup interval, stop time, number of random-run values, and whether raw traces are included. Wall-clock runtime metadata should be regenerated in an uninterrupted timing pass before making any claims about execution overhead.

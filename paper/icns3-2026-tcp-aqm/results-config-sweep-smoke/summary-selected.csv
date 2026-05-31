@@ -1,0 +1,4 @@
+run_id,sweep_name,sweep_parameter,sweep_value,first_tcp,second_tcp,topology,queue,base_rtt,ecn,rng_run,mark_count,ping_rtt_p95_ms,queue_delay_p95_ms,throughput_mean_mbps
+topology-single-bottleneck_tcp-cubic_queue-codel_rtt-10ms_ecn-1_run-1_sweep-experiment-baseRtt-10ms,rtt-sensitivity,experiment.baseRtt,10ms,cubic,,single-bottleneck,codel,10ms,1,1,8,15.7317,5.039999999999999,48.19249333333333
+topology-single-bottleneck_tcp-cubic_queue-codel_rtt-50ms_ecn-1_run-1_sweep-experiment-baseRtt-50ms,rtt-sensitivity,experiment.baseRtt,50ms,cubic,,single-bottleneck,codel,50ms,1,1,5,55.281454999999994,4.58048,45.85564266666666
+topology-single-bottleneck_tcp-cubic_queue-codel_rtt-80ms_ecn-1_run-1_sweep-experiment-baseRtt-80ms,rtt-sensitivity,experiment.baseRtt,80ms,cubic,,single-bottleneck,codel,80ms,1,1,4,85.176625,4.56,44.25203

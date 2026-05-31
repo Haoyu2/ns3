@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1012" height="360" viewBox="0 0 1012 360">
+<style>
+text{font-family:Arial,Helvetica,sans-serif;fill:#222}
+.title{font-size:16px;font-weight:700}
+.axis{stroke:#222;stroke-width:1}
+.grid{stroke:#ddd;stroke-width:1}
+.tick{font-size:10px;fill:#555}
+.label{font-size:9px;fill:#333}
+</style>
+<text class="title" x="506.0" y="24" text-anchor="middle">Mean TCP Throughput in Full Campaign</text>
+<text class="tick" transform="translate(16 145.0) rotate(-90)" text-anchor="middle">Throughput (Mbit/s)</text>
+<line class="grid" x1="72" y1="242.0" x2="984" y2="242.0"/>
+<text class="tick" x="64" y="245.0" text-anchor="end">0.0</text>
+<line class="grid" x1="72" y1="203.2" x2="984" y2="203.2"/>
+<text class="tick" x="64" y="206.2" text-anchor="end">10.8</text>
+<line class="grid" x1="72" y1="164.4" x2="984" y2="164.4"/>
+<text class="tick" x="64" y="167.4" text-anchor="end">21.6</text>
+<line class="grid" x1="72" y1="125.6" x2="984" y2="125.6"/>
+<text class="tick" x="64" y="128.6" text-anchor="end">32.4</text>
+<line class="grid" x1="72" y1="86.8" x2="984" y2="86.8"/>
+<text class="tick" x="64" y="89.8" text-anchor="end">43.2</text>
+<line class="grid" x1="72" y1="48.0" x2="984" y2="48.0"/>
+<text class="tick" x="64" y="51.0" text-anchor="end">54.0</text>
+<line class="axis" x1="72" y1="48" x2="72" y2="242"/>
+<line class="axis" x1="72" y1="242" x2="984" y2="242"/>
+<rect x="78.0" y="68.8" width="26" height="173.2" fill="#2f6fbb"/>
+<text class="tick" x="91.0" y="64.8" text-anchor="middle">48.2</text>
+<text class="label" transform="translate(91.0 256.0) rotate(62)" text-anchor="start">
+cubic codel 10ms ECN
+</text>
+<rect x="116.0" y="68.8" width="26" height="173.2" fill="#2f6fbb"/>
+<text class="tick" x="129.0" y="64.8" text-anchor="middle">48.2</text>
+<text class="label" transform="translate(129.0 256.0) rotate(62)" text-anchor="start">
+cubic fq 10ms ECN
+</text>
+<rect x="154.0" y="73.9" width="26" height="168.1" fill="#2f6fbb"/>
+<text class="tick" x="167.0" y="69.9" text-anchor="middle">46.8</text>
+<text class="label" transform="translate(167.0 256.0) rotate(62)" text-anchor="start">
+cubic pie 10ms ECN
+</text>
+<rect x="192.0" y="71.4" width="26" height="170.6" fill="#2f6fbb"/>
+<text class="tick" x="205.0" y="67.4" text-anchor="middle">47.5</text>
+<text class="label" transform="translate(205.0 256.0) rotate(62)" text-anchor="start">
+cubic red 10ms ECN
+</text>
+<rect x="230.0" y="68.8" width="26" height="173.2" fill="#b75f2a"/>
+<text class="tick" x="243.0" y="64.8" text-anchor="middle">48.2</text>
+<text class="label" transform="translate(243.0 256.0) rotate(62)" text-anchor="start">
+dctcp codel 10ms ECN
+</text>
+<rect x="268.0" y="68.8" width="26" height="173.2" fill="#b75f2a"/>
+<text class="tick" x="281.0" y="64.8" text-anchor="middle">48.2</text>
+<text class="label" transform="translate(281.0 256.0) rotate(62)" text-anchor="start">
+dctcp fq 10ms ECN
+</text>
+<rect x="306.0" y="76.0" width="26" height="166.0" fill="#b75f2a"/>
+<text class="tick" x="319.0" y="72.0" text-anchor="middle">46.2</text>
+<text class="label" transform="translate(319.0 256.0) rotate(62)" text-anchor="start">
+dctcp pie 10ms ECN
+</text>
+<rect x="344.0" y="68.8" width="26" height="173.2" fill="#b75f2a"/>
+<text class="tick" x="357.0" y="64.8" text-anchor="middle">48.2</text>
+<text class="label" transform="translate(357.0 256.0) rotate(62)" text-anchor="start">
+dctcp red 10ms ECN
+</text>
+<rect x="382.0" y="70.8" width="26" height="171.2" fill="#408b5a"/>
+<text class="tick" x="395.0" y="66.8" text-anchor="middle">47.6</text>
+<text class="label" transform="translate(395.0 256.0) rotate(62)" text-anchor="start">
+reno codel 10ms ECN
+</text>
+<rect x="420.0" y="70.9" width="26" height="171.1" fill="#408b5a"/>
+<text class="tick" x="433.0" y="66.9" text-anchor="middle">47.6</text>
+<text class="label" transform="translate(433.0 256.0) rotate(62)" text-anchor="start">
+reno fq 10ms ECN
+</text>
+<rect x="458.0" y="88.4" width="26" height="153.6" fill="#408b5a"/>
+<text class="tick" x="471.0" y="84.4" text-anchor="middle">42.7</text>
+<text class="label" transform="translate(471.0 256.0) rotate(62)" text-anchor="start">
+reno pie 10ms ECN
+</text>
+<rect x="496.0" y="79.4" width="26" height="162.6" fill="#408b5a"/>
+<text class="tick" x="509.0" y="75.4" text-anchor="middle">45.2</text>
+<text class="label" transform="translate(509.0 256.0) rotate(62)" text-anchor="start">
+reno red 10ms ECN
+</text>
+<rect x="534.0" y="83.0" width="26" height="159.0" fill="#2f6fbb"/>
+<text class="tick" x="547.0" y="79.0" text-anchor="middle">44.3</text>
+<text class="label" transform="translate(547.0 256.0) rotate(62)" text-anchor="start">
+cubic codel 80ms ECN
+</text>
+<rect x="572.0" y="82.9" width="26" height="159.1" fill="#2f6fbb"/>
+<text class="tick" x="585.0" y="78.9" text-anchor="middle">44.3</text>
+<text class="label" transform="translate(585.0 256.0) rotate(62)" text-anchor="start">
+cubic fq 80ms ECN
+</text>
+<rect x="610.0" y="127.9" width="26" height="114.1" fill="#2f6fbb"/>
+<text class="tick" x="623.0" y="123.9" text-anchor="middle">31.7</text>
+<text class="label" transform="translate(623.0 256.0) rotate(62)" text-anchor="start">
+cubic pie 80ms ECN
+</text>
+<rect x="648.0" y="117.9" width="26" height="124.1" fill="#2f6fbb"/>
+<text class="tick" x="661.0" y="113.9" text-anchor="middle">34.5</text>
+<text class="label" transform="translate(661.0 256.0) rotate(62)" text-anchor="start">
+cubic red 80ms ECN
+</text>
+<rect x="686.0" y="122.9" width="26" height="119.1" fill="#b75f2a"/>
+<text class="tick" x="699.0" y="118.9" text-anchor="middle">33.1</text>
+<text class="label" transform="translate(699.0 256.0) rotate(62)" text-anchor="start">
+dctcp codel 80ms ECN
+</text>
+<rect x="724.0" y="123.0" width="26" height="119.0" fill="#b75f2a"/>
+<text class="tick" x="737.0" y="119.0" text-anchor="middle">33.1</text>
+<text class="label" transform="translate(737.0 256.0) rotate(62)" text-anchor="start">
+dctcp fq 80ms ECN
+</text>
+<rect x="762.0" y="145.2" width="26" height="96.8" fill="#b75f2a"/>
+<text class="tick" x="775.0" y="141.2" text-anchor="middle">26.9</text>
+<text class="label" transform="translate(775.0 256.0) rotate(62)" text-anchor="start">
+dctcp pie 80ms ECN
+</text>
+<rect x="800.0" y="115.6" width="26" height="126.4" fill="#b75f2a"/>
+<text class="tick" x="813.0" y="111.6" text-anchor="middle">35.2</text>
+<text class="label" transform="translate(813.0 256.0) rotate(62)" text-anchor="start">
+dctcp red 80ms ECN
+</text>
+<rect x="838.0" y="103.1" width="26" height="138.9" fill="#408b5a"/>
+<text class="tick" x="851.0" y="99.1" text-anchor="middle">38.7</text>
+<text class="label" transform="translate(851.0 256.0) rotate(62)" text-anchor="start">
+reno codel 80ms ECN
+</text>
+<rect x="876.0" y="103.1" width="26" height="138.9" fill="#408b5a"/>
+<text class="tick" x="889.0" y="99.1" text-anchor="middle">38.7</text>
+<text class="label" transform="translate(889.0 256.0) rotate(62)" text-anchor="start">
+reno fq 80ms ECN
+</text>
+<rect x="914.0" y="138.5" width="26" height="103.5" fill="#408b5a"/>
+<text class="tick" x="927.0" y="134.5" text-anchor="middle">28.8</text>
+<text class="label" transform="translate(927.0 256.0) rotate(62)" text-anchor="start">
+reno pie 80ms ECN
+</text>
+<rect x="952.0" y="129.9" width="26" height="112.1" fill="#408b5a"/>
+<text class="tick" x="965.0" y="125.9" text-anchor="middle">31.2</text>
+<text class="label" transform="translate(965.0 256.0) rotate(62)" text-anchor="start">
+reno red 80ms ECN
+</text>
+</svg>

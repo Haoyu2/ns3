@@ -1,0 +1,25 @@
+\section{Related Work and Positioning}
+
+This work builds on two strands of ns-3 research: model implementation and evaluation infrastructure. The modern ns-3 TCP architecture separates congestion-control behavior from the socket machinery, making it practical to compare TCP variants within a common simulator framework~\cite{Casoni2016NextGenerationTcp}. The traffic-control module similarly provides the queue-disc abstraction used by CoDel, FQ-CoDel, PIE, RED, and related AQM studies~\cite{Imputato2016TrafficControl}. Prior WNS3 work has also added or validated individual transport and AQM models, including PIE, additional TCP congestion controls, and TCP BBR~\cite{Shravya2016Pie,Nguyen2016TcpVariants,Jain2018Bbr}. Our benchmark does not contribute a new TCP or queue-disc model; it packages existing models into a reproducible TCP/AQM interaction study.
+
+The ns-3 community has also produced substantial evaluation infrastructure for transport and queue-management studies. Mishra, Vankar, and Tahiliani introduced a TCP Evaluation Suite for ns-3 based on ICCRG evaluation guidance, automating simulation setup, topology creation, traffic generation, execution, and result collection for several TCP extensions and scenarios, including bandwidth, RTT, bottleneck, and long-flow-count variation~\cite{Mishra2016TcpEval}. Nagori et al. later presented a Common TCP Evaluation Suite for ns-3 that integrates Tmix realistic TCP traffic and validates its behavior against an ns-2 implementation, while also reporting open issues in the integration~\cite{Nagori2017CommonTcpEval}.
+
+AQM evaluation has also been addressed directly. Deepak, Shravya, and Tahiliani presented an AQM Evaluation Suite for ns-3 aligned with RFC 7928, automating topology construction, traffic generation, execution, result collection, and graphical output for AQM studies~\cite{Deepak2017AqmEval,Kuhn2016Rfc7928}. More recently, the AQM Evaluation Suite has been modernized for ns-3.45, CMake, newer AQM and ECN functionality, and ns-3 App Store packaging~\cite{Ns3AppStore2025AqmEval,Lin2025GSoCAqmEval}.
+
+Accordingly, this paper is not positioned as the first TCP or AQM evaluation suite for ns-3. The contribution is deliberately narrower and artifact-oriented: we study how an in-tree, validated TCP example in current ns-3 can be turned into a lightweight benchmark artifact for TCP/AQM interaction studies. The benchmark uses ns-3's TCP validation example as an anchor but packages the paper artifact as \TcpAqmBenchmark{} in \TcpAqmModule{}, preserving raw traces and exact command provenance while examining whether TCP/AQM conclusions remain stable as RTT, ECN, queue discipline, flow mix, and random-run values change.
+
+\begin{table}[t]
+  \caption{Positioning relative to closest ns-3 TCP/AQM evaluation work.}
+  \label{tab:related-positioning}
+  \begin{tabularx}{\columnwidth}{@{}p{0.31\columnwidth}X@{}}
+    \toprule
+    Prior work & Relationship to this paper \\
+    \midrule
+    TCP Evaluation Suite~\cite{Mishra2016TcpEval} & Broad ICCRG-style TCP evaluation automation. Our artifact is narrower and focuses on current TCP/AQM interaction traceability. \\
+    Common TCP Evaluation Suite~\cite{Nagori2017CommonTcpEval} & Tmix traffic and ns-2 validation. Our work does not replace realistic traffic generation; it provides a lightweight audited benchmark. \\
+    AQM Evaluation Suite~\cite{Deepak2017AqmEval} & RFC 7928-aligned AQM automation. Our work studies the intersection of TCP variant, AQM, ECN, RTT, and seeds. \\
+    AQM Suite upgrade~\cite{Ns3AppStore2025AqmEval,Lin2025GSoCAqmEval} & Modernized broad AQM suite. Our artifact is intentionally smaller and derived from an in-tree validation example. \\
+    This paper & Lightweight current-ns-3 benchmark derived from \TcpValidation{} and packaged in \TcpAqmModule{}; emphasizes YAML/JSON configuration, raw trace preservation, provenance, and TCP/AQM sensitivity across RTT, ECN, flow mix, and seeds. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}

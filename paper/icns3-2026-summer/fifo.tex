@@ -1,0 +1,41 @@
+\subsection{Analysis of a simplified model}
+In this subsection, we analysis a simplified model where the network transfer and storage processing are considered as FIFO queues, i.e., IO requests will be handled in the order of their arrivals. In addition, we assume that the processing delay is proportional to the IO request size. 
+
+...
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\linewidth]{two-machine}
+\caption{}
+\end{figure}
+
+\subsubsection{Theoretical Proof}
+
+\subsubsection{Experimental Results}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\linewidth]{fig/fifo_ssd_delay.png}
+\caption{SSD delay of read requests with different iterations}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.8\linewidth]{fig/fifo_network_delay.png}
+\caption{Network delay of write requests with different iterations}
+\end{figure}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+         Iteration& 1&2&3&4&5&6&7&8 \\
+         \hline
+         SSD RMSE& 2.29&0.99&0.36&0.20&0.06&0.04&0.01&0\\
+         \hline
+         NET RMSE& 2.71&1.11&0.59&0.14&0.09&0.09&0.03&0.02\\
+         \hline
+    \end{tabular}
+    \caption{Root mean square error in different iterations}
+    \label{tab:my_label}
+\end{table}

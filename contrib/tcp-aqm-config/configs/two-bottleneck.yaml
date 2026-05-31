@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: BSD-3-Clause
+
+experiment:
+  firstTcpType: cubic
+  secondTcpType: reno
+  queueType: fq
+  baseRtt: 80ms
+  ceThreshold: 1ms
+  linkRate: 50Mbps
+  stopTime: 40s
+  firstStartTime: 5s
+  secondStartTime: 10s
+  secondStartJitter: 5s
+  firstStartJitter: 0s
+  queueUseEcn: true
+  enablePcap: false
+  rngRun: 1
+
+topology:
+  kind: two-bottleneck
+  accessRate: 1000Mbps
+  accessDelay: 1us
+  deviceQueueSize: 3p
+  bottlenecks:
+    - name: edge-to-core
+      rate: 60Mbps
+      # Empty delay means the config object derives this value from baseRtt.
+      # For two bottlenecks, each serial bottleneck receives baseRtt / 4.
+      delay: ""
+      queueType: fq
+      trace: true
+    - name: core-to-edge
+      rate: 50Mbps
+      delay: ""
+      queueType: fq
+      trace: true
+
+sweep:
+  enabled: true
+  name: upstream-bottleneck-rate
+  parameter: topology.bottlenecks[0].rate
+  values:
+    - 40Mbps
+    - 60Mbps
+    - 80Mbps
+
+analysis:
+  metrics:
+    - total_throughput_mean_mbps
+    - jain_fairness
+    - queue_delay_p95_ms
+    - drop_count

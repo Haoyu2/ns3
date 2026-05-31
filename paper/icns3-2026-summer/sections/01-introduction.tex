@@ -1,0 +1,17 @@
+\section{Introduction}
+
+ns-3 is widely used to evaluate transport protocols and queue-management mechanisms, but TCP/AQM simulation results can be difficult to compare across papers. A conclusion such as ``queue discipline X improves delay'' or ``congestion control Y better utilizes the bottleneck'' depends on details that are easy to omit: the base RTT, queue-disc defaults, ECN configuration, traffic start time, random-run value, trace-processing method, and warmup interval. When those details are not preserved as runnable artifacts, reproducing or extending a study becomes unnecessarily fragile.
+
+This paper focuses on TCP/AQM evaluation as an ns-3 methodology problem. Rather than proposing a new congestion-control algorithm, we contribute a reproducible benchmark workflow and use it to generate baseline results over ns-3's existing TCP and traffic-control models. The workflow records exact command lines, ns-3 commit metadata, run parameters, raw traces, and derived summary statistics. It also introduces \TcpAqmModule{}, a small C++ contrib configuration module that reads YAML or JSON experiment and topology descriptions.\CodeArtifactPaths{} The benchmark remains intentionally lightweight: it derives a module example from the in-tree \TcpValidation{} scenario so that researchers can reuse a known topology without changing the original validation example.
+
+The case study compares TCP Linux Reno, CUBIC, and DCTCP across CoDel, FQ-CoDel, PIE, and RED. We vary base RTT and ECN support in the single-flow campaign, then add a mixed-flow campaign with competing TCP pairs and randomized second-flow start times. The reported metrics include throughput, fairness, RTT, bottleneck queueing delay, congestion window behavior, drops, and ECN marks. The goal is not to declare a universal winner among queue disciplines. Instead, the goal is to show which conclusions are stable, which depend on experimental assumptions, and how ns-3 users can package TCP/AQM studies so that others can rerun them.
+
+This paper makes five contributions:
+
+\begin{enumerate}
+  \item A reproducible TCP/AQM benchmark harness for ns-3, implemented as \TcpAqmBenchmark{} and derived from the validated \TcpValidation{} topology.
+  \item A C++ contrib configuration module that loads YAML/JSON experiment and topology descriptions and provides single-bottleneck and two-bottleneck templates.
+  \item A traceable artifact structure that preserves command lines, random-run values, raw traces, stdout/stderr, and git metadata.
+  \item Baseline single-flow and mixed-flow comparisons of TCP congestion-control and AQM interactions under multiple RTT, ECN, queue-discipline, and flow-mix settings.
+  \item Practical reporting recommendations for future ns-3 TCP/AQM studies.
+\end{enumerate}
