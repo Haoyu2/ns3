@@ -54,14 +54,14 @@ The contrib module includes a validation executable that loads a YAML or JSON fi
       \textbf{Run directories}\\[1pt]
       \MetadataFile{}, command, stdout/stderr, raw trace files};
     \node[stage, below=of runs] (analysis) {%
-      \textbf{Analysis and paper artifacts}\\[1pt]
-      \SummaryCsv{}, aggregate CSVs, SVG figures, LaTeX tables};
+      \textbf{Analysis}\\[1pt]
+      \SummaryCsv{}, aggregate CSVs, derived evaluation tables, SVG figures};
     \draw[arrow] (config) -- (runner);
     \draw[arrow] (runner) -- (ns3);
     \draw[arrow] (ns3) -- (runs);
     \draw[arrow] (runs) -- (analysis);
   \end{tikzpicture}
   \caption{Reproducible TCP/AQM benchmark workflow. Each stage's output is the input of the stage below.}
-  \Description{Vertical workflow diagram with five stages: inputs, Python runner, ns-3 benchmark example, run directories, and analysis artifacts; each stage is connected to the next by a downward arrow.}
+  \Description{Vertical workflow diagram with five stages: inputs, Python runner, ns-3 benchmark example, run directories, and analysis; each stage is connected to the next by a downward arrow.}
   \label{fig:workflow}
 \end{figure}
