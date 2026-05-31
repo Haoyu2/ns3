@@ -12,7 +12,7 @@ and exposes typed configuration objects to ns-3 examples.
 | [`configs/`](configs/) | YAML / JSON example configurations: single-bottleneck and two-bottleneck templates, each with a `sweep:` block. |
 | [`model/`](model/) | C++ configuration classes (`TcpAqmExperimentConfig`, `TcpAqmTopologyConfig`, sweep + analysis enums). |
 | [`examples/`](examples/) | `tcp-aqm-benchmark` (derived from `examples/tcp/tcp-validation.cc`) and the `tcp-aqm-config-validate` config-checker. |
-| [`scripts/`](scripts/) | Dependency installers for macOS and Ubuntu. |
+| [`scripts/`](scripts/) | Dependency installers (`install-deps-{macos,ubuntu}.sh`) plus the Python harness: campaign runner, analyzers, and SVG plotters. |
 | [`results/`](results/) | Committed test artifacts: per-campaign summary CSVs, derived evaluation tables, and reference figures. See [`results/README.md`](results/README.md) for layout and regeneration commands. Raw per-run trace directories are gitignored. |
 
 The public API uses ns-3 value types for scalar fields and enums for controlled
@@ -62,16 +62,21 @@ identical traces and the corresponding 95% confidence intervals are
 structurally zero. Setting a small jitter (sampled from `RngRun`-seeded RNG)
 gives the seeds real variance without changing topology or queue settings.
 
-The paper runner expands these configs directly:
+The runner expands these configs directly:
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+python3 contrib/tcp-aqm-config/scripts/run_tcp_aqm_sweep.py \
   --config-file contrib/tcp-aqm-config/configs/single-bottleneck.json \
-  --results-dir paper/icns3-2026-tcp-aqm/results-config-sweep \
+  --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep \
   --runner direct --overwrite
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
-  --results-dir paper/icns3-2026-tcp-aqm/results-config-sweep --warmup 10
+python3 contrib/tcp-aqm-config/scripts/analyze_tcp_aqm.py \
+  --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep --warmup 10
 ```
+
+The `scripts/` directory holds both the dependency installers
+(`install-deps-*.sh`) and the Python harness (`run_tcp_aqm_sweep.py`,
+`analyze_tcp_aqm.py`, `analyze_core_evaluation.py`, `plot_core_evaluation_svg.py`,
+`plot_summary_svg.py`).
 
 When `analysis.metrics` is present, the analyzer still writes the complete
 summary files and also writes compact selected-metric CSVs for the declared

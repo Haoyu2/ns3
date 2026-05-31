@@ -5,3 +5,7 @@
 !.gitignore
 !tcp-aqm-config/
 !tcp-aqm-config/**
+
+# Re-exclude python bytecode caches inside the contrib module
+tcp-aqm-config/**/__pycache__/
+tcp-aqm-config/**/*.pyc

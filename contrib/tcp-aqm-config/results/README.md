@@ -6,7 +6,7 @@ SVG figures used in the ICNS3 2026 paper and its archived artifact.
 
 Configurations live one level up in [`../configs/`](../configs/). The Python
 runner, analyzer, and plotter that produced everything here live in
-[`paper/icns3-2026-tcp-aqm/scripts/`](../../../paper/icns3-2026-tcp-aqm/scripts/).
+[`../scripts/`](../scripts/).
 
 ## Layout
 
@@ -70,7 +70,7 @@ are run from the repo root.
 Single-flow main campaign (180 runs, ≈30 min on a laptop):
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+python3 contrib/tcp-aqm-config/scripts/run_tcp_aqm_sweep.py \
   --mode single-flow --runs 3 --stop-time 40s --overwrite \
   --results-dir contrib/tcp-aqm-config/results/single-flow
 ```
@@ -78,7 +78,7 @@ python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
 Mixed-flow replicated campaign (36 runs):
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+python3 contrib/tcp-aqm-config/scripts/run_tcp_aqm_sweep.py \
   --mode mixed-flow --topologies single-bottleneck \
   --pairs cubic:reno,cubic:dctcp,reno:dctcp \
   --queue-types codel,fq --base-rtts 10ms,80ms --ecns 1 \
@@ -89,16 +89,16 @@ python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
 Smoke campaigns (small, fast):
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+python3 contrib/tcp-aqm-config/scripts/run_tcp_aqm_sweep.py \
   --mode topology --topologies single-bottleneck,two-bottleneck \
   --runs 1 --stop-time 15s --overwrite \
   --results-dir contrib/tcp-aqm-config/results/smoke/topology
 
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+python3 contrib/tcp-aqm-config/scripts/run_tcp_aqm_sweep.py \
   --mode mixed-flow --runs 1 --stop-time 15s --overwrite \
   --results-dir contrib/tcp-aqm-config/results/smoke/mixed-flow
 
-python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
+python3 contrib/tcp-aqm-config/scripts/run_tcp_aqm_sweep.py \
   --config-file contrib/tcp-aqm-config/configs/single-bottleneck.json \
   --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep \
   --overwrite
@@ -107,24 +107,24 @@ python3 paper/icns3-2026-tcp-aqm/scripts/run_tcp_aqm_sweep.py \
 ### 3. Build the summary CSVs
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
+python3 contrib/tcp-aqm-config/scripts/analyze_tcp_aqm.py \
   --results-dir contrib/tcp-aqm-config/results/single-flow --warmup 10
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
+python3 contrib/tcp-aqm-config/scripts/analyze_tcp_aqm.py \
   --results-dir contrib/tcp-aqm-config/results/mixed-flow --warmup 20
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
+python3 contrib/tcp-aqm-config/scripts/analyze_tcp_aqm.py \
   --results-dir contrib/tcp-aqm-config/results/smoke/topology --warmup 5
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
+python3 contrib/tcp-aqm-config/scripts/analyze_tcp_aqm.py \
   --results-dir contrib/tcp-aqm-config/results/smoke/mixed-flow --warmup 5
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_tcp_aqm.py \
+python3 contrib/tcp-aqm-config/scripts/analyze_tcp_aqm.py \
   --results-dir contrib/tcp-aqm-config/results/smoke/config-sweep --warmup 5
 ```
 
 ### 4. Derive the core evaluation tables and figures
 
 ```bash
-python3 paper/icns3-2026-tcp-aqm/scripts/analyze_core_evaluation.py
-python3 paper/icns3-2026-tcp-aqm/scripts/plot_core_evaluation_svg.py
-python3 paper/icns3-2026-tcp-aqm/scripts/plot_summary_svg.py
+python3 contrib/tcp-aqm-config/scripts/analyze_core_evaluation.py
+python3 contrib/tcp-aqm-config/scripts/plot_core_evaluation_svg.py
+python3 contrib/tcp-aqm-config/scripts/plot_summary_svg.py
 ```
 
 The analyzers and plotters default to this `contrib/tcp-aqm-config/results/`
@@ -159,3 +159,28 @@ environment variables (`NS_LOG`, `NS_GLOBAL_VALUE`, `LD_LIBRARY_PATH`, …), the
 exact command line, the return code, and the wall-clock time. The runner prints
 a warning when any pinned source is dirty in git so reviewers can tell the
 recorded commit apart from the actual running code.
+
+## Limitations
+
+- This module is not a new TCP or AQM model and not the first TCP or AQM
+  evaluation suite for ns-3. It is a small, auditable benchmark artifact built
+  on top of `examples/tcp/tcp-validation.cc`.
+- The wall-clock `elapsed_wall_seconds` field in each run's `metadata.json`
+  should not be used for paper claims until regenerated in an uninterrupted
+  timing pass (the shipped values were collected on a shared workstation).
+- The warmup and late-window audits flag several 40 s configurations as not
+  steady enough for final performance claims (high-RTT DCTCP/PIE and selected
+  mixed-flow cases). Those rows should be rerun with longer stop times before
+  building any final ranking on them.
+- The two-bottleneck topology is currently exercised only by the smoke
+  campaigns; all paper-reported single- and mixed-flow results use the
+  single-bottleneck template.
+- The shipped single-flow campaign was run with `firstStartJitter=0s`, so the
+  three `RngRun` values produce numerically identical traces and the recorded
+  aggregate 95 % confidence intervals are structurally zero. Future single-flow
+  campaigns should set a small `firstStartJitter` (now supported in both the
+  C++ benchmark and the Python runner) to produce meaningful CIs.
+- Earlier per-run directories under `single-flow/` were produced before the
+  runner started recording per-file SHA-256 hashes and the env snapshot. Those
+  legacy run directories pin only the git commit and `git status --short`;
+  reruns will include the expanded metadata.

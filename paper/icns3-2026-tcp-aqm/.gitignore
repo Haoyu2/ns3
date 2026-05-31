@@ -1,5 +1,0 @@
-# Test data (campaign CSVs, evaluation tables, figures) now lives under
-# contrib/tcp-aqm-config/results/ and is governed by the .gitignore in that
-# directory. This workspace only keeps the Python harness and prose docs.
-__pycache__/
-*.pyc
